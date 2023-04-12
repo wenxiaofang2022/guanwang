@@ -1,0 +1,16 @@
+export default () => ({
+    counter: 0,
+    // activeBack:false,
+    showCard:false,
+    bodyScrollHide:false,
+    showHead:true,
+    loadRate:0,
+    rateTime:0,
+    showLoading:true,
+    sourcRoot:window.location.hostname=='localhost'?"":"http://www.kasakii.com",
+    // sourcRoot:window.location.hostname=='localhost'?"":"https://kasakii.oss-cn-shanghai.aliyuncs.com",
+    // sourcRoot:window.location.hostname=='localhost'?"":window.location.hostname=='www.kasakii.com'?"http://www.kasakii.com":"https://kasakii.oss-cn-shanghai.aliyuncs.com",
+    // sourcRoot:"",
+    // sourcRoot:"http://www.kasakii.com",
+    // sourcRoot:'https://kasakii.oss-cn-shanghai.aliyuncs.com',
+})
