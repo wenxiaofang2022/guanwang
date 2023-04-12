@@ -1,2 +1,29 @@
 6b575c39-3c88-4647-bd16-466a4ef9b0a1.www
 oss-domain-verfication=4dd93c7bc051205507c26f2fdeca33db
+
+腾讯云域名管理
+https://console.dnspod.cn/dns/kasakii.com/record
+
+阿里云oss
+https://oss.console.aliyun.com/bucket/oss-cn-shanghai/kasakii/permission/ram
+
+
+ram 信任策略:
+
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
+        "RAM": [
+          "acs:ram::1950972369306966:root"
+        ]
+      }
+    }
+  ],
+  "Version": "1"
+}
+
+oss 跨域问题
+https://oss.console.aliyun.com/bucket/oss-cn-shanghai/kasakii/permission/cors

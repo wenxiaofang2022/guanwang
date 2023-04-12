@@ -10,7 +10,7 @@ export default {
     },
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0' },
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
@@ -29,7 +29,11 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // {src: '~/plugins/vue3dloader.js'},
+    '~/plugins/oilContenta.js',
+    '~/plugins/oilContentb.js',
+    '~/plugins/oilContentc.js',
+    '~/plugins/oilContentd.js',
+    '~/plugins/oilBox.js',
     {src: '~/plugins/vuelazyload.js'}
   ],
 
@@ -66,6 +70,13 @@ export default {
         if (!isDev) {
           config.output.publicPath = './static/'
         }
+        config.module.rules.push(
+          {
+              test: /\.(glsl|vs|fs|vert|frag)$/,
+              exclude: /(node_module|static)/,
+              use: 'raw-loader'
+          }
+        )
       },
       // router:{
       //   mode: 'hash',
