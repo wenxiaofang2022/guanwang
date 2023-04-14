@@ -1,24 +1,71 @@
 <template>
-  <div class="home-cloud-box" id="home-cloud-box">
-    <div id="webglDom_home" ref="webglDom_home"></div>
-    <audio controls muted preload="auto" ref="v_ki_0">
-      <source :src="v_ki[0]" type="audio/mpeg">
-    </audio>
-    <audio controls muted preload="auto" ref="v_ki_1">
-      <source :src="v_ki[1]" type="audio/mpeg">
-    </audio>
-    <audio controls muted preload="auto" ref="v_ki_2">
-      <source :src="v_ki[2]" type="audio/mpeg">
-    </audio>
-    <audio controls muted preload="auto" ref="v_sa_0">
-      <source :src="v_sa[0]" type="audio/mpeg">
-    </audio>
-    <audio controls muted preload="auto" ref="v_sa_1">
-      <source :src="v_sa[1]" type="audio/mpeg">
-    </audio>
-    <audio controls muted preload="auto" ref="v_sa_2">
-      <source :src="v_sa[2]" type="audio/mpeg">
-    </audio>
+  <div class="home-box" >
+    <div class="home-cloud-box" id="home-cloud-box">
+      <div id="webglDom_home" ref="webglDom_home"></div>
+    </div>
+    <div class="voice">
+      <audio controls muted preload="auto" ref="v_ki_0">
+        <source :src="v_ki[0]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_ki_1">
+        <source :src="v_ki[1]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_ki_2">
+        <source :src="v_ki[2]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_ki_3">
+        <source :src="v_ki[3]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_ki_4">
+        <source :src="v_ki[4]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_ki_5">
+        <source :src="v_ki[5]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_ki_6">
+        <source :src="v_ki[6]" type="audio/mpeg">
+      </audio>
+
+      <audio controls muted preload="auto" ref="v_sa_0">
+        <source :src="v_sa[0]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_sa_1">
+        <source :src="v_sa[1]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_sa_2">
+        <source :src="v_sa[2]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_sa_3">
+        <source :src="v_sa[3]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_sa_4">
+        <source :src="v_sa[4]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_sa_5">
+        <source :src="v_sa[5]" type="audio/mpeg">
+      </audio>
+      <audio controls muted preload="auto" ref="v_sa_6">
+        <source :src="v_sa[6]" type="audio/mpeg">
+      </audio>
+    </div>
+    <div class="index-bottom-text">
+      <div class="qrcode">
+        <img :src="sourcRootUrl+'/image/indexpc/qrcode.png'"/>
+      </div>
+      <div class="maintxt"></div>
+    </div>
+    <div class="blank"></div>
+    <div class="indexpc-bottom-bg">
+      <div class="bottom-left">
+        <img :src="sourcRootUrl+'/image/indexpc/bottomleft.png'"/>
+      </div>
+      <div class="bottom-copyright">
+        <div :class="[{active:cloudNative},'copyright-text']">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号-1</a></div>
+      </div>
+      <div class="bottom-right">
+        <img :src="sourcRootUrl+'/image/indexpc/bottomright.png'"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,9 +82,11 @@ import fragmentShaderSnorlax from "./snorlax/fragment.js";
 import vertexShaderSnorlax from "./snorlax/vertex.js";
 let scene,camera,renderer;
 export default {
-  name: 'HomeCloudNew',
+  name: 'HomeCloudNewPc',
   data () {
     return {
+      cloudNative:true,
+
       sourcRootUrl:this.$store.state.sourcRoot,
       isDragging:false,
       mouse:null,
@@ -73,20 +122,31 @@ export default {
       timer:null,
       direction:null,
       strength:0,
-      back_ground:"url("+this.$store.state.sourcRoot+"/image/index/text-bg.png)",
+      back_ground:"url("+this.$store.state.sourcRoot+"/image/indexpc/txtbg.png)",
+      back_ground1:"url("+this.$store.state.sourcRoot+"/image/indexpc/maintxt.png)",
+      back_ground2:"url("+this.$store.state.sourcRoot+"/image/indexpc/bottombg.png)",
       v_steps:3,
-      v_sa:[
-        this.$store.state.sourcRoot+"/voice/ki_0.mp3",
-        this.$store.state.sourcRoot+"/voice/ki_1.mp3",
-        this.$store.state.sourcRoot+"/voice/ki_2.mp3"
-      ],
       v_ki:[
-        this.$store.state.sourcRoot+"/voice/sa_0.mp3",
-        this.$store.state.sourcRoot+"/voice/sa_1.mp3",
-        this.$store.state.sourcRoot+"/voice/sa_2.mp3"
+        this.$store.state.sourcRoot+"/voice/Kii1.mp3",
+        this.$store.state.sourcRoot+"/voice/Kii2.mp3",
+        this.$store.state.sourcRoot+"/voice/Kii3.mp3",
+        this.$store.state.sourcRoot+"/voice/Kii4.mp3",
+        this.$store.state.sourcRoot+"/voice/Kii5.mp3",
+        this.$store.state.sourcRoot+"/voice/Kii6.mp3",
+        this.$store.state.sourcRoot+"/voice/Kii7.mp3"
       ],
-      v_target:null,
+      v_sa:[
+        this.$store.state.sourcRoot+"/voice/Sa1.mp3",
+        this.$store.state.sourcRoot+"/voice/Sa2.mp3",
+        this.$store.state.sourcRoot+"/voice/Sa3.mp3",
+        this.$store.state.sourcRoot+"/voice/Sa4.mp3",
+        this.$store.state.sourcRoot+"/voice/Sa5.mp3",
+        this.$store.state.sourcRoot+"/voice/Sa6.mp3",
+        this.$store.state.sourcRoot+"/voice/Sa7.mp3",
+      ],
+      v_target:1,
       start_y:null,
+      target_src:this.$store.state.sourcRoot+"/voice/Kii1.mp3",
     }
   },
   watch: {
@@ -226,6 +286,7 @@ export default {
         // console.log("this.mouse.y",this.mouse.y);
         this.start_y = startPosition.y;
         this.inner_onMouseDown(startPosition);
+        this.cloudNative = false;
       }
     },
     onMouseMove(event) {
@@ -261,92 +322,54 @@ export default {
         // console.log("target_y",target.y);
         // console.log("start_y",this.start_y);
         let tmp = Math.abs(target.y - this.start_y);
-        console.log("tmp",tmp);
+        // console.log("tmp",tmp);
         this.playAudio(tmp);
         this.inner_onMouseMove(target);
       }
     },
     playAudio(tmp){
-      //0-99 低音 100-199 中音 200- 高音
-      if(tmp<100){
-        if(this.v_target===0){
-          return
-        }
-        this.v_target = 0;
-        this.$refs.v_ki_1.pause();
-        this.$refs.v_ki_2.pause();
-        this.$refs.v_sa_0.pause();
-        this.$refs.v_sa_1.pause();
-        this.$refs.v_sa_2.pause();
-        this.$refs.v_ki_0.muted = false;
-        this.$refs.v_ki_0.play();
+      //0-49 
+      let v_target = Math.ceil(tmp/50);
+      if(v_target>7){
+        v_target = 7;
       }
-      else if(tmp<200){
-        if(this.v_target===1){
-          return
+      v_target = v_target - 1;
+      this.v_target = v_target;
+      let arr = ['v_ki_0','v_ki_1','v_ki_2','v_ki_3','v_ki_4','v_ki_5','v_ki_6'];
+      for(let m=0;m<arr.length;m++){
+        if(m==v_target){
+          this.$refs[arr[m]].play();
+          this.$refs[arr[m]].muted = false;
         }
-        this.v_target = 1;
-        this.$refs.v_ki_0.pause();
-        this.$refs.v_ki_2.pause();
-        this.$refs.v_sa_0.pause();
-        this.$refs.v_sa_1.pause();
-        this.$refs.v_sa_2.pause();
-        this.$refs.v_ki_1.muted = false;
-        this.$refs.v_ki_1.play();
-      }
-      else if(tmp>199){
-        if(this.v_target===2){
-          return
+        else{
+          this.$refs[arr[m]].pause();
         }
-        this.v_target = 2;
-        this.$refs.v_ki_0.pause();
-        this.$refs.v_ki_1.pause();
-        this.$refs.v_sa_0.pause();
-        this.$refs.v_sa_1.pause();
-        this.$refs.v_sa_2.pause();
-        this.$refs.v_ki_2.muted = false;
-        this.$refs.v_ki_2.play();
       }
     },
     onMouseUp() {
       if (!this.isDragging) return;
       this.isDragging = false;
-      if(this.timer){
-        clearTimeout(this.timer);
-      }
-      this.timer = setTimeout(() => {
-        this.closeAudio();
-      }, 1000);
+      // if(this.timer){
+      //   clearTimeout(this.timer);
+      // }
+      // this.timer = setTimeout(() => {
+        
+      // }, 1000);
+      this.closeAudio();
       this.inner_onMouseUp(this.time);
+      this.cloudNative = true;
     },
     closeAudio(){
-      console.log(this.v_target);
-      if(this.v_target===2){
-        this.$refs.v_ki_0.pause();
-        this.$refs.v_ki_1.pause();
-        this.$refs.v_ki_2.pause();
-        this.$refs.v_sa_0.pause();
-        this.$refs.v_sa_1.pause();
-        this.$refs.v_sa_2.muted = false;
-        this.$refs.v_sa_2.play();
-      }
-      else if(this.v_target===1){
-        this.$refs.v_ki_0.pause();
-        this.$refs.v_ki_1.pause();
-        this.$refs.v_ki_2.pause();
-        this.$refs.v_sa_0.pause();
-        this.$refs.v_sa_2.pause();
-        this.$refs.v_sa_1.muted = false;
-        this.$refs.v_sa_1.play();
-      }
-      else if(this.v_target===0){
-        this.$refs.v_ki_0.pause();
-        this.$refs.v_ki_1.pause();
-        this.$refs.v_ki_2.pause();
-        this.$refs.v_sa_1.pause();
-        this.$refs.v_sa_2.pause();
-        this.$refs.v_sa_0.muted = false;
-        this.$refs.v_sa_0.play();
+      let v_target = this.v_target;
+      let arr = ['v_sa_0','v_sa_1','v_sa_2','v_sa_3','v_sa_4','v_sa_5','v_sa_6'];
+      for(let m=0;m<arr.length;m++){
+        if(m==v_target){
+          this.$refs[arr[m]].play();
+          this.$refs[arr[m]].muted = false;
+        }
+        else{
+          this.$refs[arr[m]].pause();
+        }
       }
     },
     loadModel(){
@@ -373,9 +396,9 @@ export default {
         // that.mao.position.set(400,200,400);
         that.mao.rotation.y = 0;
         that.mao.rotation.z = -0.01;
-         that.mao.scale.set(2.2,2.2,2.2);
+        //  that.mao.scale.set(2.2,2.2,2.2);
         // that.mao.scale.set(2.6,2.6,2.6);
-        // that.mao.scale.set(2.6,2.6,2.6);
+        that.mao.scale.set(4,4,4);
         // that.mao.rotation.set(0,Math.PI/36,0);
         //that.mao.rotation.set(0-Math.PI/6,0-Math.PI/6,0);
         // that.mao.castShadow = true; // cast投射，方块投射阴影 
@@ -500,11 +523,97 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
+.home-box{
+  audio{
+    opacity: 0;
+  }
+  .voice{
+    width:0px;
+    height:0px;
+  }
+  .index-bottom-text{
+    width: 100vw;
+    height: 112PX;
+    position: relative;
+    .qrcode{
+      height: 96PX;
+      position: absolute;
+      left: 80PX;
+      top: 0px;
+      img{
+        height: 100%;
+        width: auto;
+      }
+    }
+    .maintxt{
+      width: 100vw;
+      height: 112PX;
+      background:v-bind(back_ground1);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size:auto 100%;
+    }
+  }
+  .blank{
+    height: 53PX;
+    width: 100%;
+  }
+  .indexpc-bottom-bg{
+    width: 100vw;
+    height: 137PX;
+    background:v-bind(back_ground2);
+    background-repeat:repeat-x;
+    background-position: center center;
+    background-size: auto 100%;
+    position: relative;
+    .bottom-left{
+      width: 73px;
+      position: absolute;
+      left: 80PX;
+      top: 50%;
+      transform: translateY(-50%);
+      img{
+        width: 100%;
+      }
+    }
+    .bottom-right{
+      height: 364PX;
+      right: 0px;
+      bottom: 0px;
+      position: absolute;
+      img{
+        height: 100%;
+      }
+    }
+    .bottom-copyright{
+      position: absolute;
+      left: 200PX;
+      bottom: 44PX;
+      .copyright-text{
+        color: #959291;
+        font-family:'syht Medium';
+        font-size: 14px;
+        line-height: 20px;
+        text-align: left;
+        position: relative;
+        z-index: 0;
+        &.active{
+          z-index: 1000;
+        }
+        a{
+          color: #959291;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
 .home-cloud-box{
   // width: 100%;
   width:100%;
-  height:280PX;
+  // height:280PX;
+  height:450PX;
   // padding: 0px;
   // overflow: hidden;
   position: relative;
@@ -512,12 +621,9 @@ export default {
   background:v-bind(back_ground);
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 110% auto;
+  background-size: 100% auto;
   // padding: 0.1PX;
   //height: calc(100vh - 100px - 251px - 78px);
-  audio{
-    opacity: 0;
-  }
   #webglDom_home{
     // width:100%;
     // height: 100%;
@@ -529,7 +635,8 @@ export default {
 
     width:100%;
     height:1000PX;
-    margin-top:-356PX;
+    // margin-top:-356PX;
+    margin-top:-280PX;
     position: fixed;
     z-index: 1000;
     // height: 370PX;

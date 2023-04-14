@@ -3,7 +3,7 @@
     <IndexTopText/>
     <!-- <HomeCloud @getrate="getRate"/> -->
     <HomeCloudNew @getrate="getRate"/>
-    <BottomBox/>
+    <!-- <BottomBox/> -->
     <BottomBg/>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
     IndexTopText:()=>import('@/components/IndexTopText'),
     // HomeCloud:()=>import('@/components/HomeCloud'),
     HomeCloudNew:()=>import('@/components/HomeCloudNew'),
-    BottomBox:()=>import('@/components/BottomBox'),
+    // BottomBox:()=>import('@/components/BottomBox'),
     BottomBg:()=>import('@/components/BottomBg'),
   },
   methods:{

@@ -1,7 +1,7 @@
 <template>
   <div class="index-bottom-text">
     <img :src="sourceUrl+'/image/index/bottomnew.png'"/>
-    <div class="copyright-text">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号</a></div>
+    <div class="copyright-text">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号-1</a></div>
   </div>
 </template>
 <script>
