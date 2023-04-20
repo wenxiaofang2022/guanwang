@@ -48,23 +48,28 @@
         <source :src="v_sa[6]" type="audio/mpeg">
       </audio>
     </div>
-    <div class="index-bottom-text">
-      <div class="qrcode">
-        <img :src="sourcRootUrl+'/image/indexpc/qrcode.png'"/>
+    <div class="bottom-fixed-box">
+      <div class="index-bottom-text">
+        <div class="qrcode">
+          <img :src="sourcRootUrl+'/image/indexpc/qrcode.png'"/>
+        </div>
+        <div class="maintxt"></div>
       </div>
-      <div class="maintxt"></div>
+      <div class="blank"></div>
+      <div class="indexpc-bottom-bg">
+        <div class="bottom-left">
+          <img :src="sourcRootUrl+'/image/indexpc/bottomleft.png'"/>
+        </div>
+        <div class="bottom-copyright">
+          <div :class="[{active:cloudNative},'copyright-text']">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号-1</a></div>
+        </div>
+        <div class="bottom-right">
+          <img :src="sourcRootUrl+'/image/indexpc/bottomright.png'"/>
+        </div>
+      </div>
     </div>
-    <div class="blank"></div>
-    <div class="indexpc-bottom-bg">
-      <div class="bottom-left">
-        <img :src="sourcRootUrl+'/image/indexpc/bottomleft.png'"/>
-      </div>
-      <div class="bottom-copyright">
-        <div :class="[{active:cloudNative},'copyright-text']">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号-1</a></div>
-      </div>
-      <div class="bottom-right">
-        <img :src="sourcRootUrl+'/image/indexpc/bottomright.png'"/>
-      </div>
+    <div v-if="showModal" class="click-modal" @click="showModal=false;">
+      我是一个弹窗
     </div>
   </div>
 </template>
@@ -85,6 +90,7 @@ export default {
   name: 'HomeCloudNewPc',
   data () {
     return {
+      showModal:true,
       cloudNative:true,
 
       sourcRootUrl:this.$store.state.sourcRoot,
@@ -147,6 +153,7 @@ export default {
       v_target:1,
       start_y:null,
       target_src:this.$store.state.sourcRoot+"/voice/Kii1.mp3",
+      audioPlay:false,
     }
   },
   watch: {
@@ -163,7 +170,8 @@ export default {
       // this.height = container.offsetHeight;
       // this.width = 390;
       this.width = window.innerWidth;
-      this.height = 1000;
+      // this.height = 1000;
+      this.height = window.innerHeight;
 
       // 场景
       scene = new THREE.Scene();
@@ -234,12 +242,13 @@ export default {
 
       //事件
       // document.getElementById("webglDom_home").addEventListener('mousedown', this.onDocumentMouseDown, false);
-      document.getElementById("webglDom_home").addEventListener('touchstart', this.onMouseDown, false);
-      document.getElementById("webglDom_home").addEventListener('touchmove', this.onMouseMove, false);
-      document.getElementById("webglDom_home").addEventListener('touchend', this.onMouseUp, false);
-      // document.getElementById("webglDom_home").addEventListener("mousedown", this.onMouseDown,false);
-      // document.getElementById("webglDom_home").addEventListener("mousemove", this.onMouseMove,false);
-      // document.getElementById("webglDom_home").addEventListener("mouseup", this.onMouseUp,false);
+      // document.getElementById("webglDom_home").addEventListener('touchstart', this.onMouseDown, false);
+      // document.getElementById("webglDom_home").addEventListener('touchmove', this.onMouseMove, false);
+      // document.getElementById("webglDom_home").addEventListener('touchend', this.onMouseUp, false);
+      document.getElementById("webglDom_home").addEventListener("mousedown", this.onMouseDown,false);
+      document.getElementById("webglDom_home").addEventListener("mousemove", this.onMouseMove,false);
+      document.getElementById("webglDom_home").addEventListener("mouseup", this.onMouseUp,false);
+      window.addEventListener("resize",this.onResize,false);
       this.loadModel();
       this.render();
     },
@@ -261,6 +270,7 @@ export default {
 
     //鼠标控制新
     onMouseDown(event) {
+      this.audioPlay = true;
       // console.log('event',event);
       var width = window.innerWidth;
       var height = window.innerHeight;
@@ -268,8 +278,10 @@ export default {
       var marginLeft = 0;
       var marginTop = 0;
       // var marginTop = 70;
-      this.mouse.x = ((event.touches[0].pageX - marginLeft) / width) * 2 - 1;
-      this.mouse.y = -((event.touches[0].pageY - marginTop) / height) * 2 + 1;
+      // this.mouse.x = ((event.touches[0].pageX - marginLeft) / width) * 2 - 1;
+      // this.mouse.y = -((event.touches[0].pageY - marginTop) / height) * 2 + 1;
+      this.mouse.x = 2 * (event.clientX / width) - 1;
+      this.mouse.y = -2 * (event.clientY / height) + 1;
 
       this.raycaster.setFromCamera(this.mouse, camera);
 
@@ -290,14 +302,17 @@ export default {
       }
     },
     onMouseMove(event) {
+      if (!this.audioPlay) return;
       var width = window.innerWidth;
       var height = window.innerHeight;
       // var marginLeft = (width - 390)/2;
       var marginLeft = 0;
       // var marginTop = 70;
       var marginTop = 0;
-      this.mouse.x = ((event.touches[0].pageX - marginLeft) / width) * 2 - 1;
-      this.mouse.y = -((event.touches[0].pageY - marginTop) / height) * 2 + 1;
+      // this.mouse.x = ((event.touches[0].pageX - marginLeft) / width) * 2 - 1;
+      // this.mouse.y = -((event.touches[0].pageY - marginTop) / height) * 2 + 1;
+      this.mouse.x = 2 * (event.clientX / width) - 1;
+      this.mouse.y = -2 * (event.clientY / height) + 1;
 
       // this.active.shape.rotation.y = this.mouse.x * 0.15;
       // this.active.shape.rotation.x = this.mouse.y * 0.15;
@@ -323,7 +338,9 @@ export default {
         // console.log("start_y",this.start_y);
         let tmp = Math.abs(target.y - this.start_y);
         // console.log("tmp",tmp);
-        this.playAudio(tmp);
+        if(this.audioPlay){
+          this.playAudio(tmp);
+        }
         this.inner_onMouseMove(target);
       }
     },
@@ -347,6 +364,7 @@ export default {
       }
     },
     onMouseUp() {
+      this.audioPlay = false;
       if (!this.isDragging) return;
       this.isDragging = false;
       // if(this.timer){
@@ -360,17 +378,24 @@ export default {
       this.cloudNative = true;
     },
     closeAudio(){
-      let v_target = this.v_target;
-      let arr = ['v_sa_0','v_sa_1','v_sa_2','v_sa_3','v_sa_4','v_sa_5','v_sa_6'];
-      for(let m=0;m<arr.length;m++){
-        if(m==v_target){
-          this.$refs[arr[m]].play();
-          this.$refs[arr[m]].muted = false;
-        }
-        else{
-          this.$refs[arr[m]].pause();
-        }
-      }
+      // let v_target = this.v_target;
+      // let arr = ['v_sa_0','v_sa_1','v_sa_2','v_sa_3','v_sa_4','v_sa_5','v_sa_6'];
+      // for(let m=0;m<arr.length;m++){
+      //   if(m==v_target){
+      //     this.$refs[arr[m]].play();
+      //     this.$refs[arr[m]].muted = false;
+      //   }
+      //   else{
+      //     this.$refs[arr[m]].pause();
+      //   }
+      // }
+    },
+    onResize(){
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      renderer.setSize(this.width, this.height);
+      camera.aspect = this.width / this.height;
+      camera.updateProjectionMatrix();
     },
     loadModel(){
       let that = this;
@@ -523,7 +548,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .home-box{
   audio{
     opacity: 0;
@@ -531,6 +556,26 @@ export default {
   .voice{
     width:0px;
     height:0px;
+  }
+  .bottom-fixed-box{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+  }
+  .click-modal{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0px;
+    top: 0px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.3);
+    text-align: center;
+    color: #fff;
+    line-height: 100vh;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
   }
   .index-bottom-text{
     width: 100vw;
@@ -611,12 +656,15 @@ export default {
 }
 .home-cloud-box{
   // width: 100%;
-  width:100%;
+  width:100vw;
+  height: 100vh;
   // height:280PX;
-  height:450PX;
-  // padding: 0px;
-  // overflow: hidden;
-  position: relative;
+  // height:450PX;
+  // position: relative;
+  position: fixed;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 10;
   background:v-bind(back_ground);
   background-repeat: no-repeat;
@@ -633,10 +681,13 @@ export default {
     // height:100vh;
     // margin-top: -55PX;
 
-    width:100%;
-    height:1000PX;
+    // width:100%;
+    // height:1000PX;
+    width: 100vw;
+    height: 100vh;
+    margin-top: 33PX;
     // margin-top:-356PX;
-    margin-top:-280PX;
+    // margin-top:-280PX;
     position: fixed;
     z-index: 1000;
     // height: 370PX;

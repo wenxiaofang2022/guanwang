@@ -131,6 +131,17 @@
         // deep:true
       }
     },
+    mounted(){
+      //判断是pc还是移动
+      let userAgentInfo = navigator.userAgent;
+      let Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
+      let getArr = Agents.filter(i => userAgentInfo.includes(i));
+      // return getArr.length ? true : false;
+      console.log("getArr",getArr.length);
+      if(!getArr.length){
+        this.$router.push({path: '/indexpc', replace: true})
+      }
+    },
     methods:{
       animateNum(newNum){
         // console.log("newNum",newNum);

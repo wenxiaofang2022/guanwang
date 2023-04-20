@@ -346,17 +346,17 @@ export default {
       this.cloudNative = true;
     },
     closeAudio(){
-      let v_target = this.v_target;
-      let arr = ['v_sa_0','v_sa_1','v_sa_2','v_sa_3','v_sa_4','v_sa_5','v_sa_6'];
-      for(let m=0;m<arr.length;m++){
-        if(m==v_target){
-          this.$refs[arr[m]].play();
-          this.$refs[arr[m]].muted = false;
-        }
-        else{
-          this.$refs[arr[m]].pause();
-        }
-      }
+      // let v_target = this.v_target;
+      // let arr = ['v_sa_0','v_sa_1','v_sa_2','v_sa_3','v_sa_4','v_sa_5','v_sa_6'];
+      // for(let m=0;m<arr.length;m++){
+      //   if(m==v_target){
+      //     this.$refs[arr[m]].play();
+      //     this.$refs[arr[m]].muted = false;
+      //   }
+      //   else{
+      //     this.$refs[arr[m]].pause();
+      //   }
+      // }
     },
     loadModel(){
       let that = this;
@@ -509,7 +509,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .home-box{
   audio{
     opacity: 0;

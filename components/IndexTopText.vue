@@ -47,7 +47,7 @@
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .index-top-text{
   // padding-top: 45px;
   // padding-top: 100px;
