@@ -699,4 +699,53 @@ export default {
     transform: translateX(-50%);
   }
 }
+@media only screen and (max-width: 1200px) {
+  .home-box{
+    
+  }
+}
+@media only screen and (max-width: 830px) {
+  .home-box{
+    .bottom-fixed-box{
+      .index-bottom-text{
+        height: 130PX;
+        .qrcode{
+          height: 130PX;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .maintxt{
+          display: none;
+        }
+      }
+      .blank{
+        height: 31PX;
+      }
+      .indexpc-bottom-bg{
+        .bottom-left{
+          display: none;
+        }
+        .bottom-right{
+          display: none;
+        }
+        .bottom-copyright{
+          position: relative;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          padding-top: 45PX;
+          .copyright-text{
+            text-align: center;
+            a{
+              display: block;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>
