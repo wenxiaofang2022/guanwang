@@ -17,7 +17,9 @@
       return{
        marqueeTxt:'# 欢迎光临卡卅给油所 # Welcome to KASAKII Creative Supply Station # カサキイガソリンスタンドへようこそ',
        timer:null,
-       back_ground:"url("+this.$store.state.sourcRoot+"/image/indexpc/headtxt.png)"
+       back_ground:"url("+this.$store.state.sourcRoot+"/image/indexpc/headtxt.png)",
+       back_ground1:"url("+this.$store.state.sourcRoot+"/image/indexpc/headtxt1.png)",
+       back_ground2:"url("+this.$store.state.sourcRoot+"/image/indexpc/headtxt2.png)"
       }
     },
     mounted(){
@@ -49,9 +51,7 @@
 </script>
 <style lang="scss" scoped>
 .index-top-text{
-  // padding-top: 45px;
-  // padding-top: 100px;
-  padding-top: 66PX;
+  padding-top: 30PX;
   text-align: center;
   color: #000;
   .art-text{
@@ -64,9 +64,6 @@
     position: relative;
   }
   .marquee-box{
-    // width: 228px;
-    // height: 46px;
-    // line-height: 46px;
     width:526PX;
     height:40px;
     line-height:40px;
@@ -75,28 +72,15 @@
     border-radius: 5px;
     color: #FF5C00;
     text-shadow: 0px 0px 5px #FF5C00;
-    //text-shadow: 0 0 2px #FF5C00,0 0 5px #FF5C00,0 0 7.5px #FF5C00,0 0 10px #FF5C00;
     font-family:'xszt Regular';
     font-size: 22px;
     margin:0 auto;
     margin-top: -20PX;
-    // margin-top: 12px;
     overflow: hidden;
 
   }
 
-  // .marquee-outer-wrapper {
-  //     overflow: hidden;
-  //     width: 100%;
-  // }
-  
   .marquee-inner-wrapper {
-      // background: #eee;
-      // height: 40px;
-      // font-size: 14px;
-      // color: red;
-      // line-height: 40px;
-      // margin: 0 auto;
       white-space: nowrap;
       position: relative;
   }
@@ -147,18 +131,39 @@
           display: none;
       }
   }
-
-  .chinese-desc{
-    // font-weight: 900;
-    font-size: 21px;
-    line-height: 24px;
-    margin-top: 12px;
+}
+@media only screen and (max-width: 1200PX) {
+.index-top-text{
+  .art-text{
+    width: 671PX;
+    height: 221PX;
+    background: v-bind(back_ground2);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 0 auto;
+    position: relative;
   }
-  .english-desc{
-    // font-weight: 900;
-    font-family:'syht Heavy';
-    font-size: 17px;
-    line-height: 22px;
+  .marquee-box{
+    margin-top:0PX;
+    width: 505PX;
   }
+}
+}
+@media only screen and (max-width: 830PX) {
+.index-top-text{
+  .art-text{
+    width: 448PX;
+    height: 171PX;
+    background: v-bind(back_ground1);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+  .marquee-box{
+    margin-top: -20PX;
+    width: 389PX;
+  }
+}
 }
 </style>

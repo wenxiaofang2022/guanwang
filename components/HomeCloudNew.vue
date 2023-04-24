@@ -52,6 +52,9 @@
       <img :src="sourcRootUrl+'/image/index/bottomnew.png'"/>
       <div :class="[{active:cloudNative},'copyright-text']">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号-1</a></div>
     </div>
+    <div v-if="showModal" class="click-modal" @click="showModal=false;">
+      我是一个弹窗
+    </div>
   </div>
 </template>
 
@@ -71,6 +74,7 @@ export default {
   name: 'HomeCloudNew',
   data () {
     return {
+      showModal:true,
       back_ground1:"url("+this.$store.state.sourcRoot+"/image/index/copyright.png)",
       back_ground2:"url("+this.$store.state.sourcRoot+"/image/index/logo.png)",
       cloudNative:true,
@@ -113,13 +117,13 @@ export default {
       back_ground:"url("+this.$store.state.sourcRoot+"/image/index/text-bg.png)",
       v_steps:3,
       v_ki:[
-        this.$store.state.sourcRoot+"/voice/Kii1.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii2.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii3.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii4.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii5.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii6.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii7.mp3"
+        this.$store.state.sourcRoot+"/voice/1.mp3",
+        this.$store.state.sourcRoot+"/voice/2.mp3",
+        this.$store.state.sourcRoot+"/voice/3.mp3",
+        this.$store.state.sourcRoot+"/voice/4.mp3",
+        this.$store.state.sourcRoot+"/voice/5.mp3",
+        this.$store.state.sourcRoot+"/voice/6.mp3",
+        this.$store.state.sourcRoot+"/voice/7.mp3"
       ],
       v_sa:[
         this.$store.state.sourcRoot+"/voice/Sa1.mp3",
@@ -307,9 +311,9 @@ export default {
         const target = intersect[0].point;
         // console.log("target_y",target.y);
         // console.log("start_y",this.start_y);
-        let tmp = Math.abs(target.y - this.start_y);
-        // console.log("tmp",tmp);
-        this.playAudio(tmp);
+        // let tmp = Math.abs(target.y - this.start_y);
+        // // console.log("tmp",tmp);
+        // this.playAudio(tmp);
         this.inner_onMouseMove(target);
       }
     },
@@ -517,6 +521,21 @@ export default {
   .voice{
     width:0px;
     height:0px;
+  }
+  .click-modal{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0px;
+    top: 0px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.3);
+    text-align: center;
+    color: #fff;
+    line-height: 100vh;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
   }
   .index-bottom-text{
     img{

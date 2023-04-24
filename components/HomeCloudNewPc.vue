@@ -83,14 +83,14 @@ import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 // import * as dat from 'dat.gui';
 // import gsap from "gsap"; 
-import fragmentShaderSnorlax from "./snorlax/fragment.js";
-import vertexShaderSnorlax from "./snorlax/vertex.js";
+import fragmentShaderSnorlax from "./snorlax/fragment1.js";
+import vertexShaderSnorlax from "./snorlax/vertex1.js";
 let scene,camera,renderer;
 export default {
   name: 'HomeCloudNewPc',
   data () {
     return {
-      showModal:true,
+      showModal:false,
       cloudNative:true,
 
       sourcRootUrl:this.$store.state.sourcRoot,
@@ -131,15 +131,16 @@ export default {
       back_ground:"url("+this.$store.state.sourcRoot+"/image/indexpc/txtbg.png)",
       back_ground1:"url("+this.$store.state.sourcRoot+"/image/indexpc/maintxt.png)",
       back_ground2:"url("+this.$store.state.sourcRoot+"/image/indexpc/bottombg.png)",
+      back_ground3:"url("+this.$store.state.sourcRoot+"/image/indexpc/maintxt2.png)",
       v_steps:3,
       v_ki:[
-        this.$store.state.sourcRoot+"/voice/Kii1.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii2.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii3.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii4.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii5.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii6.mp3",
-        this.$store.state.sourcRoot+"/voice/Kii7.mp3"
+        this.$store.state.sourcRoot+"/voice/1.mp3",
+        this.$store.state.sourcRoot+"/voice/2.mp3",
+        this.$store.state.sourcRoot+"/voice/3.mp3",
+        this.$store.state.sourcRoot+"/voice/4.mp3",
+        this.$store.state.sourcRoot+"/voice/5.mp3",
+        this.$store.state.sourcRoot+"/voice/6.mp3",
+        this.$store.state.sourcRoot+"/voice/7.mp3"
       ],
       v_sa:[
         this.$store.state.sourcRoot+"/voice/Sa1.mp3",
@@ -192,8 +193,10 @@ export default {
 
       camera = new THREE.OrthographicCamera( this.width / - 2, this.width / 2, this.height / 2, this.height / - 2, 1, 1000); //正投影相机
       // camera.position.set(400,200,400);
-       camera.position.set(0,200,400);
+      camera.position.set(0,200,400);
+      // camera.position.set(0,200,0);
       // camera.position.set(0,0,0);
+      // camera.position.set(500,0,500);
 
       this.add(camera);
       camera.lookAt(scene.position);
@@ -208,6 +211,7 @@ export default {
 
       // 渲染器
       renderer = new THREE.WebGLRenderer({
+        alpha: true,
         antialias: true
       })
 
@@ -215,7 +219,7 @@ export default {
       // this.add(axesHelper);
 
       this.touchTarget = new THREE.Mesh(
-        new THREE.PlaneGeometry(1000, 2000),
+        new THREE.PlaneGeometry(5000, 5000),
         new THREE.MeshBasicMaterial({
           depthTest:false,
           opacity: 1,
@@ -245,9 +249,12 @@ export default {
       // document.getElementById("webglDom_home").addEventListener('touchstart', this.onMouseDown, false);
       // document.getElementById("webglDom_home").addEventListener('touchmove', this.onMouseMove, false);
       // document.getElementById("webglDom_home").addEventListener('touchend', this.onMouseUp, false);
-      document.getElementById("webglDom_home").addEventListener("mousedown", this.onMouseDown,false);
-      document.getElementById("webglDom_home").addEventListener("mousemove", this.onMouseMove,false);
-      document.getElementById("webglDom_home").addEventListener("mouseup", this.onMouseUp,false);
+      // document.getElementById("webglDom_home").addEventListener("mousedown", this.onMouseDown,false);
+      // document.getElementById("webglDom_home").addEventListener("mousemove", this.onMouseMove,false);
+      // document.getElementById("webglDom_home").addEventListener("mouseup", this.onMouseUp,false);
+      window.addEventListener("mousedown", this.onMouseDown,false);
+      window.addEventListener("mousemove", this.onMouseMove,false);
+      window.addEventListener("mouseup", this.onMouseUp,false);
       window.addEventListener("resize",this.onResize,false);
       this.loadModel();
       this.render();
@@ -270,7 +277,6 @@ export default {
 
     //鼠标控制新
     onMouseDown(event) {
-      this.audioPlay = true;
       // console.log('event',event);
       var width = window.innerWidth;
       var height = window.innerHeight;
@@ -287,6 +293,7 @@ export default {
 
       const intersect = this.raycaster.intersectObjects(this.meshList,true);
       // console.log("intersect",intersect);
+      this.audioPlay = true;
       if (intersect.length) {
         this.isDragging = true;
         // if(intersect[0].point.x<0){
@@ -296,21 +303,16 @@ export default {
       
         const startPosition = intersect[0].point;
         // console.log("this.mouse.y",this.mouse.y);
-        this.start_y = startPosition.y;
+        // this.start_y = startPosition.y;
         this.inner_onMouseDown(startPosition);
         this.cloudNative = false;
       }
     },
     onMouseMove(event) {
       if (!this.audioPlay) return;
+      // console.log("event",event);
       var width = window.innerWidth;
       var height = window.innerHeight;
-      // var marginLeft = (width - 390)/2;
-      var marginLeft = 0;
-      // var marginTop = 70;
-      var marginTop = 0;
-      // this.mouse.x = ((event.touches[0].pageX - marginLeft) / width) * 2 - 1;
-      // this.mouse.y = -((event.touches[0].pageY - marginTop) / height) * 2 + 1;
       this.mouse.x = 2 * (event.clientX / width) - 1;
       this.mouse.y = -2 * (event.clientY / height) + 1;
 
@@ -336,11 +338,12 @@ export default {
         const target = intersect[0].point;
         // console.log("target_y",target.y);
         // console.log("start_y",this.start_y);
-        let tmp = Math.abs(target.y - this.start_y);
+        // let tmp = Math.abs(target.y - this.start_y);
         // console.log("tmp",tmp);
-        if(this.audioPlay){
-          this.playAudio(tmp);
-        }
+        // if(this.audioPlay){
+        //   this.playAudio(tmp);
+        // }
+        // console.log("target",target);
         this.inner_onMouseMove(target);
       }
     },
@@ -364,7 +367,7 @@ export default {
       }
     },
     onMouseUp() {
-      this.audioPlay = false;
+      // this.audioPlay = false;
       if (!this.isDragging) return;
       this.isDragging = false;
       // if(this.timer){
@@ -391,11 +394,63 @@ export default {
       // }
     },
     onResize(){
-      this.width = window.innerWidth;
-      this.height = window.innerHeight;
-      renderer.setSize(this.width, this.height);
-      camera.aspect = this.width / this.height;
-      camera.updateProjectionMatrix();
+      //去除缓存
+      if(this.meshList&&this.meshList.length>0){
+        this.meshList = [];
+      }
+
+      let _object = this.active.shape;
+      if(_object){
+        _object.traverse(function(_obj) {
+          // console.log("_obj",_obj);
+          if (_obj.type === 'Mesh') {
+            _obj.geometry.dispose();
+            _obj.material.dispose();
+          }
+        })
+        // 删除场景对象scene的子对象group
+        scene.remove(_object);
+      }
+
+      let webglDom_home = document.getElementById('webglDom_home');
+      if(webglDom_home&&webglDom_home.firstChild){
+        webglDom_home.removeChild(webglDom_home.firstChild);
+      }
+
+      if(scene){
+        scene.traverse((child) => {
+          if (child.material) {
+            child.material.dispose();
+          }
+          if (child.geometry) {
+            child.geometry.dispose();
+          }
+          child = null;
+        });
+      }
+
+      if (renderer) {
+        renderer.forceContextLoss();
+        renderer.dispose();
+        renderer.domElement = null;
+        renderer = null;
+      };
+      console.log(scene);
+      if (scene) {
+        scene.clear();
+        scene = null;
+      };
+
+      this.active.gltfLoader = null;
+      this.active.material=null;
+      this.active.shape=null;
+      this.active.textureLoader=null;
+      camera = null;
+      renderer = null;
+
+      // console.log(scene);
+      //重新渲染
+      this.init();
     },
     loadModel(){
       let that = this;
@@ -426,7 +481,7 @@ export default {
         that.mao.scale.set(4,4,4);
         // that.mao.rotation.set(0,Math.PI/36,0);
         //that.mao.rotation.set(0-Math.PI/6,0-Math.PI/6,0);
-        // that.mao.castShadow = true; // cast投射，方块投射阴影 
+        // that.mao.castShadow = true; // cast投射，方块投射阴影
         // that.mao.receiveShadow = true; // 物体接收阴影
 
         // that.mao.rotation.set(0,1.4,0);
@@ -472,15 +527,13 @@ export default {
           shape:shape,
           textureLoader:new THREE.TextureLoader(),
         }
-        // that.group.add(that.active.shape);
         that.meshList.push(that.active.shape);
         that.add(that.active.shape);
-        // that.$forceUpdate();
       },(xhr)=>{
-        var _onProgress = Math.floor(xhr.loaded / xhr.total * 100);
-        if(_onProgress==100){
-          that.$emit('getrate',_onProgress);
-        }
+        // var _onProgress = Math.floor(xhr.loaded / xhr.total * 100);
+        // if(_onProgress==100){
+        //   that.$emit('getrate',_onProgress);
+        // }
       })
     },
     addLight () {
@@ -532,15 +585,17 @@ export default {
     },
     render () {
       // this.time += 0.001;
-      this.time += 0.01633;
+      // this.time += 0.01633;
+      this.time += 0.018;
       if(this.material){
         this.update(this.time);
       }
       // console.log("this.active",this.active);
       // this.active.shape.update(this.time);
-
-      renderer.render(scene, camera);
-      requestAnimationFrame(this.render);
+      if(renderer){
+        renderer.render(scene, camera);
+        requestAnimationFrame(this.render);
+      }
     }
   }
 
@@ -549,6 +604,14 @@ export default {
 
 
 <style lang="scss" scoped>
+*{ 
+  -webkit-touch-callout:none; /*系统默认菜单被禁用*/
+  -webkit-user-select:none; /*webkit浏览器*/
+  -khtml-user-select:none; /*早期浏览器*/
+  -moz-user-select:none;/*火狐*/
+  -ms-user-select:none; /*IE10*/
+  user-select:none;
+}
 .home-box{
   audio{
     opacity: 0;
@@ -598,6 +661,7 @@ export default {
       background-repeat: no-repeat;
       background-position: center center;
       background-size:auto 100%;
+      display: block;
     }
   }
   .blank{
@@ -613,6 +677,7 @@ export default {
     background-size: auto 100%;
     position: relative;
     .bottom-left{
+      display: block;
       width: 73px;
       position: absolute;
       left: 80PX;
@@ -623,6 +688,7 @@ export default {
       }
     }
     .bottom-right{
+      display: block;
       height: 364PX;
       right: 0px;
       bottom: 0px;
@@ -665,7 +731,7 @@ export default {
   left: 0px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: 100;
   background:v-bind(back_ground);
   background-repeat: no-repeat;
   background-position: center center;
@@ -686,25 +752,70 @@ export default {
     width: 100vw;
     height: 100vh;
     margin-top: 33PX;
-    // margin-top:-356PX;
-    // margin-top:-280PX;
     position: fixed;
     z-index: 1000;
-    // height: 370PX;
-    // margin-top: -55PX;
-    // position:absolute;
 
     z-index:10;
     left: 50%;
     transform: translateX(-50%);
   }
 }
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1200PX) {
   .home-box{
-    
+    .bottom-fixed-box{
+      .index-bottom-text{
+        .qrcode{
+          height: 96PX;
+          position: absolute;
+          left: 39PX;
+          top: 0px;
+          img{
+            height: 100%;
+            width: auto;
+          }
+        }
+        .maintxt{
+          display: block;
+          width: 100vw;
+          height: 112PX;
+          background:v-bind(back_ground3);
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size:auto 100%;
+        }
+      }
+      .blank{
+        height: 33PX;
+        width: 100%;
+      }
+      .indexpc-bottom-bg{
+        .bottom-left{
+          display: none;
+        }
+        .bottom-right{
+          display: none;
+        }
+        .bottom-copyright{
+          position: relative;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          padding-top: 73PX;
+          .copyright-text{
+            text-align: center;
+            a{
+              display: inline-block;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
   }
 }
-@media only screen and (max-width: 830px) {
+@media only screen and (max-width: 830PX) {
   .home-box{
     .bottom-fixed-box{
       .index-bottom-text{
