@@ -370,7 +370,8 @@ export default {
 
       loader.setDRACOLoader(dracoLoader);
       let glburl;
-      let tmproot = "https://kasakii.oss-cn-shanghai.aliyuncs.com";
+      // let tmproot = "https://kasakii.oss-cn-shanghai.aliyuncs.com";
+      let tmproot = this.sourcRootUrl;
       if(activeIndex==0){
         glburl = tmproot+'/caseimg/01_new.glb';
       }

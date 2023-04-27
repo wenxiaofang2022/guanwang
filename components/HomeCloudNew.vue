@@ -74,7 +74,7 @@ export default {
   name: 'HomeCloudNew',
   data () {
     return {
-      showModal:true,
+      showModal:false,
       back_ground1:"url("+this.$store.state.sourcRoot+"/image/index/copyright.png)",
       back_ground2:"url("+this.$store.state.sourcRoot+"/image/index/logo.png)",
       cloudNative:true,

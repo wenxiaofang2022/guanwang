@@ -48,7 +48,7 @@
         <source :src="v_sa[6]" type="audio/mpeg">
       </audio>
     </div>
-    <div class="bottom-fixed-box">
+    <div :class="[{active:cloudNative},'bottom-fixed-box']">
       <div class="index-bottom-text">
         <div class="qrcode">
           <img :src="sourcRootUrl+'/image/indexpc/qrcode.png'"/>
@@ -57,9 +57,9 @@
       </div>
       <div class="blank"></div>
       <div class="indexpc-bottom-bg">
-        <div class="bottom-left">
+        <!-- <div class="bottom-left">
           <img :src="sourcRootUrl+'/image/indexpc/bottomleft.png'"/>
-        </div>
+        </div> -->
         <div class="bottom-copyright">
           <div :class="[{active:cloudNative},'copyright-text']">Copyright © KASAKII.All Rights Reserved.<a href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">粤ICP备20012453号-1</a></div>
         </div>
@@ -128,7 +128,9 @@ export default {
       timer:null,
       direction:null,
       strength:0,
-      back_ground:"url("+this.$store.state.sourcRoot+"/image/indexpc/txtbg.png)",
+      txt_ground:"url("+this.$store.state.sourcRoot+"/image/indexpc/txtbg.png)",
+      txt_ground1:"url("+this.$store.state.sourcRoot+"/image/indexpc/txtbg1.png)",
+      txt_ground2:"url("+this.$store.state.sourcRoot+"/image/indexpc/txtbg2.png)",
       back_ground1:"url("+this.$store.state.sourcRoot+"/image/indexpc/maintxt.png)",
       back_ground2:"url("+this.$store.state.sourcRoot+"/image/indexpc/bottombg.png)",
       back_ground3:"url("+this.$store.state.sourcRoot+"/image/indexpc/maintxt2.png)",
@@ -167,36 +169,15 @@ export default {
     init () {
       // 初始化画布宽高
       const container = this.$refs.webglDom_home;
-      // this.width = container.offsetWidth;
-      // this.height = container.offsetHeight;
-      // this.width = 390;
       this.width = window.innerWidth;
-      // this.height = 1000;
       this.height = window.innerHeight;
 
       // 场景
       scene = new THREE.Scene();
       this.textloader = new THREE.TextureLoader();
 
-      // 相机
-      // camera = new THREE.OrthographicCamera( this.width / - 2, this.width / 2, this.height / 2, this.height / - 2, 1, 1000); //正投影相机
-      // camera.position.set(400,200,400);
-
-      // camera = new THREE.PerspectiveCamera(
-      //   65,
-      //   this.width / this.height,
-      //   0.1,
-      //   1000
-      // );
-      // camera.position.z = 3;
-
-
       camera = new THREE.OrthographicCamera( this.width / - 2, this.width / 2, this.height / 2, this.height / - 2, 1, 1000); //正投影相机
-      // camera.position.set(400,200,400);
       camera.position.set(0,200,400);
-      // camera.position.set(0,200,0);
-      // camera.position.set(0,0,0);
-      // camera.position.set(500,0,500);
 
       this.add(camera);
       camera.lookAt(scene.position);
@@ -393,64 +374,145 @@ export default {
       //   }
       // }
     },
+    clearScene(myObjects){
+      let that = this;
+      // 从scene中删除模型并释放内存
+      if (myObjects.length > 0) {
+        for (var i = 0; i < myObjects.length; i++) {
+          var currObj = myObjects[i];
+          // 判断类型
+          if (currObj instanceof THREE.Scene) {
+            var children = currObj.children;
+            for (var i = 0; i < children.length; i++) {
+              that.deleteGroup(children[i]);
+            }
+          } else {
+            that.deleteGroup(currObj);
+          }
+          console.log("currObj",currObj);
+          scene.remove(currObj);
+        }
+      }
+      // console.log(myObjects);
+    },
+    deleteGroup(group){
+      if (!group) return
+      // 删除掉所有的模型组内的mesh
+      group.traverse(function (item) {
+          if (item instanceof THREE.Mesh) {
+              item.geometry.dispose(); // 删除几何体
+              item.material.dispose(); // 删除材质
+          }
+      });
+      // 删除掉所有的模型组内的mesh
+      // group.traverse(function (item) {
+      //   if (item instanceof THREE.Mesh) {
+      //   if(Array.isArray(item.material)) {
+      //     item.material.forEach(a => {
+      //       a.dispose()
+      //     })
+      //   }else{
+      //     item.material.dispose() // 删除材质
+      //   }
+      //     item.geometry.dispose() // 删除几何体
+      //   }
+      // })
+    },
     onResize(){
+      // this.$router.replace({path:'/indexpc'},()=>{},()=>{});
+      // this.$router.go(0);
+      // this.reload;
+      this.$router.replace(`/empty`,()=>{},()=>{});
+      return
       //去除缓存
       if(this.meshList&&this.meshList.length>0){
         this.meshList = [];
       }
-
-      let _object = this.active.shape;
-      if(_object){
-        _object.traverse(function(_obj) {
-          // console.log("_obj",_obj);
-          if (_obj.type === 'Mesh') {
-            _obj.geometry.dispose();
-            _obj.material.dispose();
-          }
-        })
-        // 删除场景对象scene的子对象group
-        scene.remove(_object);
+      if(scene&&scene.children){
+        this.clearScene(scene.children);
       }
-
-      let webglDom_home = document.getElementById('webglDom_home');
-      if(webglDom_home&&webglDom_home.firstChild){
-        webglDom_home.removeChild(webglDom_home.firstChild);
-      }
-
-      if(scene){
-        scene.traverse((child) => {
-          if (child.material) {
-            child.material.dispose();
-          }
-          if (child.geometry) {
-            child.geometry.dispose();
-          }
-          child = null;
-        });
-      }
-
-      if (renderer) {
-        renderer.forceContextLoss();
-        renderer.dispose();
-        renderer.domElement = null;
-        renderer = null;
-      };
-      console.log(scene);
-      if (scene) {
-        scene.clear();
-        scene = null;
-      };
-
+      // console.log(scene);
+      scene.clear();
+      console.log("scene",scene);
+      scene = null;
+      renderer.forceContextLoss();
+      renderer.dispose();
+      renderer.domElement = null;
+      renderer.content = null;
+      renderer.clear();
+      renderer = null;
       this.active.gltfLoader = null;
       this.active.material=null;
       this.active.shape=null;
       this.active.textureLoader=null;
+      this.material = null;
       camera = null;
       renderer = null;
+      let webglDom_home = document.getElementById('webglDom_home');
+      if(webglDom_home&&webglDom_home.firstChild){
+        webglDom_home.removeChild(webglDom_home.firstChild);
+      }
+      this.init();
+
+      // let _object = this.active.shape;
+      // if(this.active.shape){
+      //   this.active.shape.traverse(function(_obj) {
+      //     // console.log("_obj",_obj);
+      //     if (_obj.type === 'Mesh') {
+      //       _obj.geometry.dispose();
+      //       _obj.material.dispose();
+      //     }
+      //   })
+      //   // 删除场景对象scene的子对象group
+      //   this.active.shape.clear();
+      //   scene.remove(this.active.shape);
+      // }
+
+      // let webglDom_home = document.getElementById('webglDom_home');
+      // if(webglDom_home&&webglDom_home.firstChild){
+      //   webglDom_home.removeChild(webglDom_home.firstChild);
+      // }
+
+      // if(scene){
+      //   scene.traverse((child) => {
+      //     // console.log("child",child);
+      //     if (child.material) {
+      //       child.material.dispose();
+      //     }
+      //     if (child.geometry) {
+      //       child.geometry.dispose();
+      //     }
+      //     child = null;
+      //   });
+      // }
+
+      // console.log(scene);
+
+      // if (renderer) {
+      //   renderer.forceContextLoss();
+      //   renderer.dispose();
+      //   renderer.domElement = null;
+      //   renderer.content = null;
+      //   renderer.clear();
+      //   renderer = null;
+      // };
+    
+      // if (scene) {
+      //   scene.clear();
+      //   scene = null;
+      // };
+
+      // this.active.gltfLoader = null;
+      // this.active.material=null;
+      // this.active.shape=null;
+      // this.active.textureLoader=null;
+      // this.material = null;
+      // camera = null;
+      // renderer = null;
 
       // console.log(scene);
       //重新渲染
-      this.init();
+      // this.init();
     },
     loadModel(){
       let that = this;
@@ -617,38 +679,42 @@ export default {
     opacity: 0;
   }
   .voice{
-    width:0px;
-    height:0px;
+    width:0PX;
+    height:0PX;
   }
   .bottom-fixed-box{
     position: fixed;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0PX;
+    left: 0PX;
+    &.active{
+      z-index: 101;
+    }
   }
   .click-modal{
     position: fixed;
     width: 100vw;
     height: 100vh;
-    left: 0px;
-    top: 0px;
+    left: 0PX;
+    top: 0PX;
     z-index: 1000;
     background: rgba(0,0,0,0.3);
     text-align: center;
     color: #fff;
     line-height: 100vh;
-    font-size: 24px;
+    font-size: 24PX;
     font-weight: bold;
     cursor: pointer;
   }
   .index-bottom-text{
     width: 100vw;
-    height: 112PX;
+    height: 133PX;
     position: relative;
     .qrcode{
       height: 96PX;
       position: absolute;
       left: 80PX;
-      top: 0px;
+      top: 50%;
+      transform: translateY(-50%);
       img{
         height: 100%;
         width: auto;
@@ -656,7 +722,7 @@ export default {
     }
     .maintxt{
       width: 100vw;
-      height: 112PX;
+      height: 133PX;
       background:v-bind(back_ground1);
       background-repeat: no-repeat;
       background-position: center center;
@@ -670,7 +736,7 @@ export default {
   }
   .indexpc-bottom-bg{
     width: 100vw;
-    height: 137PX;
+    height: 69PX;
     background:v-bind(back_ground2);
     background-repeat:repeat-x;
     background-position: center center;
@@ -678,7 +744,7 @@ export default {
     position: relative;
     .bottom-left{
       display: block;
-      width: 73px;
+      width: 73PX;
       position: absolute;
       left: 80PX;
       top: 50%;
@@ -689,23 +755,24 @@ export default {
     }
     .bottom-right{
       display: block;
-      height: 364PX;
-      right: 0px;
-      bottom: 0px;
+      // height: 364PX;
+      width:319PX;
+      right: 0PX;
+      bottom: 0PX;
       position: absolute;
       img{
-        height: 100%;
+        width: 100%;
       }
     }
     .bottom-copyright{
       position: absolute;
-      left: 200PX;
-      bottom: 44PX;
+      left: 80PX;
+      bottom: 20PX;
       .copyright-text{
         color: #959291;
         font-family:'syht Medium';
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 14PX;
+        line-height: 20PX;
         text-align: left;
         position: relative;
         z-index: 0;
@@ -728,16 +795,16 @@ export default {
   // height:450PX;
   // position: relative;
   position: fixed;
-  left: 0px;
+  left: 0PX;
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
-  background:v-bind(back_ground);
+  background:v-bind(txt_ground);
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% auto;
+  background-size:auto 269PX;
   // padding: 0.1PX;
-  //height: calc(100vh - 100px - 251px - 78px);
+  //height: calc(100vh - 100PX - 251PX - 78PX);
   #webglDom_home{
     // width:100%;
     // height: 100%;
@@ -751,7 +818,7 @@ export default {
     // height:1000PX;
     width: 100vw;
     height: 100vh;
-    margin-top: 33PX;
+    // margin-top: 33PX;
     position: fixed;
     z-index: 1000;
 
@@ -764,11 +831,13 @@ export default {
   .home-box{
     .bottom-fixed-box{
       .index-bottom-text{
+        height: 121PX;
         .qrcode{
           height: 96PX;
           position: absolute;
           left: 39PX;
-          top: 0px;
+          top: 50%;
+          transform: translateY(-50%);
           img{
             height: 100%;
             width: auto;
@@ -777,7 +846,7 @@ export default {
         .maintxt{
           display: block;
           width: 100vw;
-          height: 112PX;
+          height: 121PX;
           background:v-bind(back_ground3);
           background-repeat: no-repeat;
           background-position: center center;
@@ -802,7 +871,7 @@ export default {
           width: 100%;
           height: 100%;
           text-align: center;
-          padding-top: 73PX;
+          padding-top: 27PX;
           .copyright-text{
             text-align: center;
             a{
@@ -812,6 +881,12 @@ export default {
           }
         }
       }
+    }
+    .home-cloud-box{
+      background:v-bind(txt_ground1);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size:auto 409PX;
     }
   }
 }
@@ -856,6 +931,12 @@ export default {
           }
         }
       }
+    }
+    .home-cloud-box{
+      background:v-bind(txt_ground1);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size:auto 425PX;
     }
   }
 }

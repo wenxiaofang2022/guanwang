@@ -1,28 +1,25 @@
 <template>
   <div class="container">
-    <IndexTopTextPc/>
-    <HomeCloudNewPc/>
+    <!-- <IndexTopTextPc/> -->
+    <!-- <HomeCloudNewPc v-if="isReload"/> -->
     <!-- <BottomBgPc/> -->
   </div>
 </template>
-
 <script>
 export default {
   layout:'loadingpc',
-  name: 'IndexPage',
+  name: 'Empty',
   data(){
     return{
-      // isReload: true,
+      
     }
   },
-  // provide() {
-  //   return {
-  //     reload: this.reload,
-  //   };
-  // },
+  mounted(){
+    this.$router.replace(`/indexpc`,()=>{},()=>{});
+  },
   components: {
-    IndexTopTextPc:()=>import('@/components/IndexTopTextPc'),
-    HomeCloudNewPc:()=>import('@/components/HomeCloudNewPc'),
+    // IndexTopTextPc:()=>import('@/components/IndexTopTextPc'),
+    // HomeCloudNewPc:()=>import('@/components/HomeCloudNewPc'),
     // BottomBgPc:()=>import('@/components/BottomBgPc'),
   },
   methods:{

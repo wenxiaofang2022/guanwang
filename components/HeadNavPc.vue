@@ -37,15 +37,15 @@
 <style lang="scss">
 .common-head-nav-pc{
   width:100%;
-  height: 66PX;
+  height: 48PX;
   background: v-bind(back_ground);
   background-repeat:repeat-x;
   background-size: 100% 100%;
   position: relative;
   .logo-btn{
     position: absolute;
-    width:131PX;
-    height:43PX;
+    width:82PX;
+    height:25PX;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);

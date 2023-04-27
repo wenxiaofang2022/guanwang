@@ -51,12 +51,12 @@
 </script>
 <style lang="scss" scoped>
 .index-top-text{
-  padding-top: 30PX;
+  padding-top: 38PX;
   text-align: center;
   color: #000;
   .art-text{
-    width: 798PX;
-    height: 221PX;
+    width: 925PX;
+    height: 82PX;
     background: v-bind(back_ground);
     background-repeat: no-repeat;
     background-size: 100%;
@@ -65,17 +65,18 @@
   }
   .marquee-box{
     width:526PX;
-    height:40px;
-    line-height:40px;
+    height:40PX;
+    line-height:40PX;
     background: #1C1C1C;
-    box-shadow: inset -3px -3px 7px #000000, inset 5px 5px 8px #000000;
-    border-radius: 5px;
+    box-shadow: inset -3PX -3PX 7PX #000000, inset 5PX 5PX 8PX #000000;
+    border-radius: 5PX;
     color: #FF5C00;
-    text-shadow: 0px 0px 5px #FF5C00;
+    text-shadow: 0PX 0PX 5PX #FF5C00;
     font-family:'xszt Regular';
-    font-size: 22px;
+    font-size: 22PX;
     margin:0 auto;
-    margin-top: -20PX;
+    // margin-top: -20PX;
+    margin-top: 22PX;
     overflow: hidden;
 
   }
@@ -135,8 +136,8 @@
 @media only screen and (max-width: 1200PX) {
 .index-top-text{
   .art-text{
-    width: 671PX;
-    height: 221PX;
+    width: 571PX;
+    height: 51PX;
     background: v-bind(back_ground2);
     background-repeat: no-repeat;
     background-size: 100%;
@@ -144,16 +145,16 @@
     position: relative;
   }
   .marquee-box{
-    margin-top:0PX;
-    width: 505PX;
+    margin-top:20PX;
+    width: 411PX;
   }
 }
 }
 @media only screen and (max-width: 830PX) {
 .index-top-text{
   .art-text{
-    width: 448PX;
-    height: 171PX;
+    width: 538PX;
+    height: 65PX;
     background: v-bind(back_ground1);
     background-repeat: no-repeat;
     background-size: 100%;
@@ -161,8 +162,8 @@
     position: relative;
   }
   .marquee-box{
-    margin-top: -20PX;
-    width: 389PX;
+    margin-top:13PX;
+    width: 411PX;
   }
 }
 }
