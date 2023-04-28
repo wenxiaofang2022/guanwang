@@ -29,10 +29,6 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/oilContenta.js',
-    '~/plugins/oilContentb.js',
-    '~/plugins/oilContentc.js',
-    '~/plugins/oilContentd.js',
     '~/plugins/oilBox.js',
     {src: '~/plugins/vuelazyload.js'}
   ],

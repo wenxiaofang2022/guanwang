@@ -350,8 +350,9 @@ export default {
     loadModel(){
       let that = this 
       let loader = new GLTFLoader();
-      const dataurl = this.$store.state.sourcRoot+'/caseimg/detail1_bak.glb';
-      //const dataurl = 'https://kasakii.oss-cn-shanghai.aliyuncs.com/caseimg/detail1_bak.glb';
+      //const dataurl = this.$store.state.sourcRoot+'/caseimg/detail1_bak.glb';
+      const dataurl = 'https://kasakii0428.oss-cn-shanghai.aliyuncs.com/caseimg/detail1_bak.glb';
+      //const dataurl = '/caseimg/detail1_bak.glb';
       loader.load(dataurl,(gltf) => {
         console.log("gltf", gltf);
         // const object = gltf.scene || gltf.scenes[0];

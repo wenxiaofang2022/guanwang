@@ -341,7 +341,7 @@
   left: 50%;
   transform: translateX(-50%);
   top:0px;
-  z-index: 101;
+  z-index: 1001;
   .head-nav-bg{
     width: 100%;
     height: 100vh;

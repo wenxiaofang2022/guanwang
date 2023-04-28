@@ -374,8 +374,8 @@ export default {
 
       // let loader = new GLTFLoader();
       // const dataurl = this.$store.state.sourcRoot+'/caseimg/snorlax_222.glb';
-      // const dataurl = 'https://kasakii.oss-cn-shanghai.aliyuncs.com/caseimg/snorlax_222.glb';
-      const dataurl = '/caseimg/snorlax_222.glb';
+      const dataurl = 'https://kasakii0428.oss-cn-shanghai.aliyuncs.com/caseimg/snorlax_222.glb';
+      // const dataurl = '/caseimg/snorlax_222.glb';
       loader.load(dataurl, (gltf) => {
         // console.log("gltf",gltf);
         that.mao = gltf.scene.children[0];
@@ -402,7 +402,8 @@ export default {
         let textureLoader = new THREE.TextureLoader();
         textureLoader.textureEncoding = THREE.sRGBEncoding;
         const dataurl = this.$store.state.sourcRoot+'/caseimg/snorlax_texture.png';
-        const dataurl1 = this.$store.state.sourcRoot+'/caseimg/sk-uv-new.png';
+        // const dataurl1 = this.$store.state.sourcRoot+'/caseimg/sk-uv-new.png';
+        const dataurl1 = '/caseimg/sk-uv-new.png';
         let param_v = location.href.split("?v=")[1];
         // let _dataurl = param_v=='1'?dataurl1:dataurl;
         let _dataurl = dataurl1;
