@@ -82,7 +82,7 @@ export default {
     transpile: ["three"]
   },
   router: {
-    mode: 'hash',
+    // mode: 'hash',
     // extendRoutes(routes, resolve) {
     //   routes.push({
     //     name: 'page-not-found',

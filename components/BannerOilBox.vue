@@ -169,7 +169,8 @@ export default {
       let tmppath = this.pageIndex[this.stickerIndex];
       // console.log("tmppath",tmppath);
       this.$router.push({
-        path:'/caselist/'+tmppath
+        path:'/caselist/'+tmppath,
+        replace:true
       });
 
       //防止重复点击

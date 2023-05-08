@@ -210,7 +210,8 @@ export default {
             path:path,
             query:{
               activeIndex:index
-            }
+            },
+            replace:true
           });
         },500);
       }

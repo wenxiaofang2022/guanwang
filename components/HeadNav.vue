@@ -212,6 +212,7 @@
           // console.log("path",path);
           this.$router.push({
             path:path,
+            replace:true
           });
           // if(this.timer1){
           //   clearTimeout(this.timer1);

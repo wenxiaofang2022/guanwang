@@ -1,8 +1,8 @@
 <template>
   <div class="contact-us-switch">
     <div class="switch-btns">
-      <div :class="[{active:activeIndex===0},'btn']" @click="activeIndex=0;"><span>一键给油<i>+</i></span></div>
-      <div :class="[{active:activeIndex===1},'btn']" @click="activeIndex=1;"><span>加入给油所</span></div>
+      <div class="btn" :class="activeIndex===0?'active':''" @click="activeIndex=0;"><span>一键给油<i>+</i></span></div>
+      <div class="btn" :class="activeIndex===1?'active':''" @click="activeIndex=1;"><span>加入给油所</span></div>
       <div class="active_bg" :class="activeIndex==0?'leftactive':'rightactive'"></div>
     </div>
     <div class="switch-box">

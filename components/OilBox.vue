@@ -251,7 +251,8 @@ export default {
           let path = this.logopath[selectObject.name];
           if(!path)return;
           this.$router.push({
-            path:'/caselist/'+path
+            path:'/caselist/'+path,
+            replace:true
           });
       } else {
           // console.log('未选中 Mesh!');
