@@ -144,6 +144,12 @@ export default {
   },
   mounted () {
     this.$nextTick(this.init);
+    //修复部分纹理随机黑色问题
+    var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if(isiOS){
+      window.createImageBitmap = undefined;
+    }
   },
   methods: {
     init () {
@@ -278,6 +284,9 @@ export default {
         this.inner_onMouseDown(startPosition);
         this.cloudNative = false;
       }
+      else{
+        event.preventDefault();
+      }
     },
     onMouseMove(event) {
       var width = window.innerWidth;
@@ -315,6 +324,9 @@ export default {
         // // console.log("tmp",tmp);
         // this.playAudio(tmp);
         this.inner_onMouseMove(target);
+      }
+      else{
+        event.preventDefault();
       }
     },
     playAudio(tmp){

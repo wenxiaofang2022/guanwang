@@ -899,6 +899,7 @@ export default {
         .qrcode{
           height: 130PX;
           left: 50%;
+          top: 0px;
           transform: translateX(-50%);
         }
         .maintxt{
@@ -922,7 +923,7 @@ export default {
           width: 100%;
           height: 100%;
           text-align: center;
-          padding-top: 45PX;
+          padding-top: 23PX;
           .copyright-text{
             text-align: center;
             a{
