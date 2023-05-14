@@ -118,6 +118,14 @@ export default {
     
   },
   mounted () {
+    //修复部分纹理随机黑色问题
+    //======================
+    var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if(isiOS){
+      window.createImageBitmap = undefined;
+    }
+    //=======================
     this.$nextTick(this.init);
   },
   methods: {
@@ -216,7 +224,10 @@ export default {
       camera.lookAt(0,0,0);
       scene.add(camera);
 
+      // 添加灯光
+      this.addLight();
       this.loadGlb();
+
       container.addEventListener('mousedown',this.onDocumentMouseDown,false);
       document.addEventListener('touchstart', this.onDocumentTouchDown, false);
       document.addEventListener('touchend',this.onDocumentTouchUp,false);
@@ -291,6 +302,29 @@ export default {
     },
 
     changeCamera(gltf){
+      //======================================================================================================================
+      //              处理模型变黑
+      //======================================================================================================================
+      gltf.scene.traverse(function (child) {
+          if (child.isMesh) {
+            // 1.2
+            // child.material.roughness = 0.6;
+              // child.material.metalness = 0.5;
+              // child.frustumCulled = false;
+              // child.material.emissiveIntensity = 1;
+              child.material.emissive = child.material.color;
+              child.material.emissiveMap = child.material.map;
+              // child.material.transparent = true;
+              // child.isLineSegments = true;
+              // child.material.wireframe = false;
+              // child.material.alphaTest = 0.2
+          }
+      });
+      //======================================================================================================================
+      //              处理模型变黑
+      //======================================================================================================================
+
+      // console.log("gltf",gltf);
       _object = gltf.scene || gltf.scenes[0];
       const box = new THREE.Box3().setFromObject(_object);
       const size = box.getSize(new THREE.Vector3(0,0,0)).length();
@@ -325,11 +359,11 @@ export default {
         antialias: true
       })
 
-      renderer.outputEncoding = THREE.sRGBEncoding;
+      // renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
       renderer.toneMappingExposure = 1.2;//色调映射曝光度
-      renderer.shadowMap.enabled = true;//阴影就不用说了
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+      // renderer.shadowMap.enabled = true;//阴影就不用说了
+      // renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       // this.textureEncoding = THREE.sRGBEncoding;
 
       renderer.setClearColor(new THREE.Color('#000000'), 0);
@@ -402,34 +436,89 @@ export default {
 
     addLight () {
       const common_num = 1000;
+      const rate = 0.5;
       // 环境光
-      const ambientLight = new THREE.AmbientLight(0xffffff,0.5);
+      const ambientLight = new THREE.AmbientLight(0xffffff, rate);
       this.add(ambientLight);
 
       // 平行光（太阳光）正面
-      const directionalLight = new THREE.DirectionalLight(0xffffff,0.5);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, rate);
       directionalLight.position.set(0, common_num, common_num);
       // directionalLight.castShadow = true;
       this.add(directionalLight);
 
       // 左侧
-      const directionalLight2 = new THREE.DirectionalLight(0xffffff,0.5);
-      directionalLight2.position.set(0-common_num, common_num, common_num);
+      const directionalLight2 = new THREE.DirectionalLight(0xffffff, rate);
+      directionalLight2.position.set(0 - common_num, common_num, common_num);
       this.add(directionalLight2);
 
       // 右侧
-      const directionalLight3 = new THREE.DirectionalLight(0xffffff,0.5);
+      const directionalLight3 = new THREE.DirectionalLight(0xffffff, rate);
       directionalLight3.position.set(common_num, common_num, common_num);
       this.add(directionalLight3);
 
       // 背面
-      const directionalLight4 = new THREE.DirectionalLight(0xffffff,0.5);
-      directionalLight4.position.set(0, common_num, 0-common_num);
+      const directionalLight4 = new THREE.DirectionalLight(0xffffff, rate);
+      directionalLight4.position.set(0, common_num, 0 - common_num);
       this.add(directionalLight4);
 
-      const directionalLight5 = new THREE.DirectionalLight(0xffffff,0.5);
-      directionalLight5.position.set(0, 0-common_num, 0-common_num);
+      const directionalLight5 = new THREE.DirectionalLight(0xffffff, rate);
+      directionalLight5.position.set(0, 0 - common_num, 0 - common_num);
       this.add(directionalLight5);
+
+      // // 环境光
+      // const ambientLight = new THREE.AmbientLight(0xffffff,rate);
+      // this.add(ambientLight);
+
+      // // 平行光（太阳光）正面
+      // const directionalLight = new THREE.DirectionalLight(0xffffff,rate);
+      // directionalLight.position.set(0, common_num, common_num);
+      // this.add(directionalLight);
+
+      // // 左侧
+      // const directionalLight2 = new THREE.DirectionalLight(0xffffff, rate);
+      // directionalLight2.position.set(0-common_num, common_num, common_num);
+      // this.add(directionalLight2);
+
+      // // 右侧
+      // const directionalLight3 = new THREE.DirectionalLight(0xffffff,rate);
+      // directionalLight3.position.set(common_num, common_num, common_num);
+      // this.add(directionalLight3);
+
+      // // 背面
+      // const directionalLight4 = new THREE.DirectionalLight(0xffffff, rate);
+      // directionalLight4.position.set(0, common_num, 0-common_num);
+      // this.add(directionalLight4);
+
+      // const common_num = 1000;
+      // // 环境光
+      // const ambientLight = new THREE.AmbientLight(0xffffff,0.5);
+      // this.add(ambientLight);
+
+      // // 平行光（太阳光）正面
+      // const directionalLight = new THREE.DirectionalLight(0xffffff,0.5);
+      // directionalLight.position.set(0, common_num, common_num);
+      // // directionalLight.castShadow = true;
+      // this.add(directionalLight);
+
+      // // 左侧
+      // const directionalLight2 = new THREE.DirectionalLight(0xffffff,0.5);
+      // directionalLight2.position.set(0-common_num, common_num, common_num);
+      // this.add(directionalLight2);
+
+      // // 右侧
+      // const directionalLight3 = new THREE.DirectionalLight(0xffffff,0.5);
+      // directionalLight3.position.set(common_num, common_num, common_num);
+      // this.add(directionalLight3);
+
+      // // 背面
+      // const directionalLight4 = new THREE.DirectionalLight(0xffffff,0.5);
+      // directionalLight4.position.set(0, common_num, 0-common_num);
+      // this.add(directionalLight4);
+
+      // const directionalLight5 = new THREE.DirectionalLight(0xffffff,0.5);
+      // directionalLight5.position.set(0, 0-common_num, 0-common_num);
+      // this.add(directionalLight5);
     },
     add (obj) {
       scene.add(obj);

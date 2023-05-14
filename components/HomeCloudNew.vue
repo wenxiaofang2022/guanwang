@@ -144,12 +144,6 @@ export default {
   },
   mounted () {
     this.$nextTick(this.init);
-    //修复部分纹理随机黑色问题
-    var u = navigator.userAgent;
-    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    if(isiOS){
-      window.createImageBitmap = undefined;
-    }
   },
   methods: {
     init () {
