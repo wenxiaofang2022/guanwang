@@ -103,6 +103,14 @@ export default {
         this.showSticker(null, 'next');
       }
     })
+    //修复部分纹理随机黑色问题
+    //======================
+    var u = navigator.userAgent;
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if(isiOS){
+      window.createImageBitmap = undefined;
+    }
+    //=======================
     this.$nextTick(this.init);
   },
   methods: {
@@ -235,11 +243,11 @@ export default {
 
       // this.renderer.physicallyCorrectLights = true;
       // 1.2
-      // this.renderer.outputEncoding = THREE.sRGBEncoding;
-      // this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-      // this.renderer.toneMappingExposure = 1.0;//色调映射曝光度
-      // this.renderer.shadowMap.enabled = true;//阴影就不用说了
-      // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+      this.renderer.outputEncoding = THREE.sRGBEncoding;
+      this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+      this.renderer.toneMappingExposure = 0.4;//色调映射曝光度
+      this.renderer.shadowMap.enabled = true;//阴影就不用说了
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
 
       // this.textureEncoding = THREE.sRGBEncoding;
 
@@ -356,7 +364,7 @@ export default {
       let loader = new GLTFLoader();
       //const dataurl = this.$store.state.sourcRoot+'/caseimg/detail1_bak.glb';
       const dataurl = 'https://kasakii0428.oss-cn-shanghai.aliyuncs.com/caseimg/detail1_bak.glb';
-      //const dataurl = '/caseimg/detail1_bak.glb';
+      // const dataurl = '/caseimg/detail.glb';
       loader.load(dataurl, (gltf) => {
         console.log("gltf", gltf);
         // const object = gltf.scene || gltf.scenes[0];
@@ -395,7 +403,7 @@ export default {
             // 1.2
             // child.material.roughness = 0.6;
 
-            // child.material.metalness = 0.5;
+            child.material.metalness = 1.0;
             // child.frustumCulled = false;
             // child.material.emissiveIntensity = 1;
             child.material.emissive = child.material.color;

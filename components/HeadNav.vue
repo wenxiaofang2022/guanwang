@@ -138,9 +138,9 @@
       let getArr = Agents.filter(i => userAgentInfo.includes(i));
       // return getArr.length ? true : false;
       console.log("getArr",getArr.length);
-      if(!getArr.length){
-        this.$router.push({path: '/indexpc', replace: true})
-      }
+      // if(!getArr.length){
+      //   this.$router.push({path: '/indexpc', replace: true})
+      // }
     },
     methods:{
       animateNum(newNum){
