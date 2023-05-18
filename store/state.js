@@ -7,7 +7,7 @@ export default () => ({
     loadRate:0,
     rateTime:0,
     showLoading:true,
-    sourcRoot:window.location.hostname=='localhost'?"":"http://www.kasakii.com",
+    sourcRoot:window.location.hostname=='localhost'?"":"http://kasakii.com",
     // sourcRoot:window.location.hostname=='localhost'?"":"https://kasakii0428.oss-cn-shanghai.aliyuncs.com",
     // sourcRoot:window.location.hostname=='localhost'?"":window.location.hostname=='www.kasakii.com'?"http://www.kasakii.com":"https://kasakii0428.oss-cn-shanghai.aliyuncs.com",
     // sourcRoot:"",

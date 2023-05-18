@@ -78,6 +78,7 @@ export default {
       // onPointerDownLon:0,
       // onPointerDownLat:0,
       back_ground: "url(" + this.$store.state.sourcRoot + "/image/aboutus/arrow-right.png)",
+      isIOS16:false,
     }
   },
   watch: {
@@ -105,15 +106,33 @@ export default {
     })
     //修复部分纹理随机黑色问题
     //======================
-    var u = navigator.userAgent;
-    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    if(isiOS){
-      window.createImageBitmap = undefined;
-    }
+    this.judgeIOSversion();
     //=======================
     this.$nextTick(this.init);
   },
   methods: {
+    judgeIOSversion(){
+      var str= navigator.userAgent.toLowerCase();
+      // console.log("str: "+str);
+      // alert("str: "+str);
+      var ver=str.match(/cpu iphone os (.*?) like mac os/);
+      // var ver;
+      if(!ver){
+        ver = str.split("version/");
+        //console.log("ver ",ver);
+      }
+      // console.log("ver: "+ver);
+      // alert("ver: "+ver);
+      if(ver){
+        var iosv = parseInt(ver[1].replace(/_/g,"."));
+        //console.log('ios版本为：'+iosv);
+        // alert('ios版本为：'+iosv);
+        if(iosv==16){
+          this.isIOS16 = true;
+          window.createImageBitmap = undefined;
+        }
+      }
+    },
     showSticker(event, type) {
       if (!this.clickable) return;
       this.clickable = false;
@@ -243,11 +262,17 @@ export default {
 
       // this.renderer.physicallyCorrectLights = true;
       // 1.2
-      this.renderer.outputEncoding = THREE.sRGBEncoding;
-      this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-      this.renderer.toneMappingExposure = 0.4;//色调映射曝光度
-      this.renderer.shadowMap.enabled = true;//阴影就不用说了
-      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+      if(this.isIOS16){
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+        this.renderer.toneMappingExposure = 0.8;//色调映射曝光度
+      }
+      else{
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+        this.renderer.toneMappingExposure = 1.2;//色调映射曝光度
+        this.renderer.shadowMap.enabled = true;//阴影就不用说了
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+      }
 
       // this.textureEncoding = THREE.sRGBEncoding;
 
@@ -395,17 +420,18 @@ export default {
         //   }
         // });
 
+        
+        if(this.isIOS16){
         //======================================================================================================================
         //              处理模型变黑
         //======================================================================================================================
         gltf.scene.traverse(function (child) {
           if (child.isMesh) {
             // 1.2
+            // child.material.metalness = 0.8;
             // child.material.roughness = 0.6;
-
-            child.material.metalness = 1.0;
             // child.frustumCulled = false;
-            // child.material.emissiveIntensity = 1;
+            child.material.emissiveIntensity = 1;
             child.material.emissive = child.material.color;
             child.material.emissiveMap = child.material.map;
             // child.material.transparent = true;
@@ -416,6 +442,7 @@ export default {
         //======================================================================================================================
         //              处理模型变黑
         //======================================================================================================================
+        }
 
         const mao = gltf.scene.children[0];
         mao.position.set(0, 0, 0);

@@ -109,6 +109,7 @@ export default {
       back_ground4:"url("+this.$store.state.sourcRoot+"/image/caselist/checked.png)",
       back_ground5:"url("+this.$store.state.sourcRoot+"/image/caselist/divider.png)",
       back_ground6:"url("+this.$store.state.sourcRoot+"/image/caselist/bottom_tips.png)",
+      isIOS16:false,
     }
   },
   watch: {
@@ -120,15 +121,33 @@ export default {
   mounted () {
     //修复部分纹理随机黑色问题
     //======================
-    var u = navigator.userAgent;
-    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    if(isiOS){
-      window.createImageBitmap = undefined;
-    }
+    this.judgeIOSversion();
     //=======================
     this.$nextTick(this.init);
   },
   methods: {
+    judgeIOSversion(){
+      var str= navigator.userAgent.toLowerCase();
+      // console.log("str: "+str);
+      // alert("str: "+str);
+      var ver=str.match(/cpu iphone os (.*?) like mac os/);
+      // var ver;
+      if(!ver){
+        ver = str.split("version/");
+        //console.log("ver ",ver);
+      }
+      // console.log("ver: "+ver);
+      // alert("ver: "+ver);
+      if(ver){
+        var iosv = parseInt(ver[1].replace(/_/g,"."));
+        //console.log('ios版本为：'+iosv);
+        // alert('ios版本为：'+iosv);
+        if(iosv==16){
+          this.isIOS16 = true;
+          window.createImageBitmap = undefined;
+        }
+      }
+    },
     loadModel(index){
       if(index==this.activeIndex)return;
       if(!this.clickable)return;
@@ -225,7 +244,9 @@ export default {
       scene.add(camera);
 
       // 添加灯光
-      this.addLight();
+      if(this.isIOS16){
+        this.addLight();
+      }
       this.loadGlb();
 
       container.addEventListener('mousedown',this.onDocumentMouseDown,false);
@@ -302,27 +323,29 @@ export default {
     },
 
     changeCamera(gltf){
-      //======================================================================================================================
-      //              处理模型变黑
-      //======================================================================================================================
-      gltf.scene.traverse(function (child) {
-          if (child.isMesh) {
-            // 1.2
-            // child.material.roughness = 0.6;
-              // child.material.metalness = 0.5;
-              // child.frustumCulled = false;
-              // child.material.emissiveIntensity = 1;
-              child.material.emissive = child.material.color;
-              child.material.emissiveMap = child.material.map;
-              // child.material.transparent = true;
-              // child.isLineSegments = true;
-              // child.material.wireframe = false;
-              // child.material.alphaTest = 0.2
-          }
-      });
-      //======================================================================================================================
-      //              处理模型变黑
-      //======================================================================================================================
+      if(this.isIOS16){
+        //======================================================================================================================
+        //              处理模型变黑
+        //======================================================================================================================
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+              // 1.2
+                // child.material.roughness = 1.0;
+                // child.material.metalness = 0.5;
+                // child.frustumCulled = false;
+                child.material.emissiveIntensity = 1;
+                child.material.emissive = child.material.color;
+                child.material.emissiveMap = child.material.map;
+                // child.material.transparent = true;
+                // child.isLineSegments = true;
+                // child.material.wireframe = false;
+                // child.material.alphaTest = 0.2
+            }
+        });
+        //======================================================================================================================
+        //              处理模型变黑
+        //======================================================================================================================
+      }
 
       // console.log("gltf",gltf);
       _object = gltf.scene || gltf.scenes[0];
@@ -359,12 +382,19 @@ export default {
         antialias: true
       })
 
-      // renderer.outputEncoding = THREE.sRGBEncoding;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-      renderer.toneMappingExposure = 1.2;//色调映射曝光度
-      // renderer.shadowMap.enabled = true;//阴影就不用说了
-      // renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
-      // this.textureEncoding = THREE.sRGBEncoding;
+      if(this.isIOS16){
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+        renderer.toneMappingExposure = 0.8;//色调映射曝光度
+      }
+      else{
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+        renderer.toneMappingExposure = 1.2;//色调映射曝光度
+        renderer.shadowMap.enabled = true;//阴影就不用说了
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+        // this.textureEncoding = THREE.sRGBEncoding;
+      }
+      
 
       renderer.setClearColor(new THREE.Color('#000000'), 0);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
