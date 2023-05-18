@@ -243,6 +243,11 @@ export default {
       camera.lookAt(0,0,0);
       scene.add(camera);
 
+      // 添加灯光
+      if(this.isIOS16){
+        this.addLight();
+      }
+
       this.loadGlb();
 
       container.addEventListener('mousedown',this.onDocumentMouseDown,false);
@@ -326,7 +331,7 @@ export default {
         gltf.scene.traverse(function (child) {
             if (child.isMesh) {
               // 1.2
-                // child.material.roughness = 1.0;
+                child.material.roughness = 0.0;
                 child.material.metalness = 1.0;
                 // child.frustumCulled = false;
                 child.material.emissiveIntensity = 1;
@@ -379,11 +384,12 @@ export default {
       })
 
       if(this.isIOS16){
-        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.physicallyCorrectLights = true;
+        // renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        renderer.toneMappingExposure = 0;//色调映射曝光度
-        // this.renderer.shadowMap.enabled = true;//阴影就不用说了
-        // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+        renderer.toneMappingExposure = 1.0;//色调映射曝光度
+        renderer.shadowMap.enabled = true;//阴影就不用说了
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
       else{
         renderer.outputEncoding = THREE.sRGBEncoding;
