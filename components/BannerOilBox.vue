@@ -264,7 +264,9 @@ export default {
       // 1.2
       if(this.isIOS16){
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        this.renderer.toneMappingExposure = 0.8;//色调映射曝光度
+        this.renderer.toneMappingExposure = 0.5;//色调映射曝光度
+        // this.renderer.shadowMap.enabled = true;//阴影就不用说了
+        // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
       else{
         this.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -428,7 +430,7 @@ export default {
         gltf.scene.traverse(function (child) {
           if (child.isMesh) {
             // 1.2
-            // child.material.metalness = 0.8;
+            child.material.metalness = 0.8;
             // child.material.roughness = 0.6;
             // child.frustumCulled = false;
             child.material.emissiveIntensity = 1;
