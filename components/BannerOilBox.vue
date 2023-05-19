@@ -261,10 +261,12 @@ export default {
       })
 
       // this.renderer.physicallyCorrectLights = true;
-      // 1.2
       if(this.isIOS16){
+        this.renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        this.renderer.toneMappingExposure = 0.5;//色调映射曝光度
+        this.renderer.toneMappingExposure = 1.1;//色调映射曝光度
+        this.renderer.shadowMap.enabled = true;//阴影就不用说了
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
         // this.renderer.shadowMap.enabled = true;//阴影就不用说了
         // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
@@ -292,6 +294,9 @@ export default {
 
       const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
       this.scene.environment = pmremGenerator.fromScene(environment).texture;
+      if(this.isIOS16){
+        this.scene.environment.encoding = THREE.sRGBEncoding;
+      }
 
       //事件
       //document.getElementById("webglDom_banner").addEventListener('click', onDocumentClick, false);
@@ -423,28 +428,28 @@ export default {
         // });
 
         
-        if(this.isIOS16){
-        //======================================================================================================================
-        //              处理模型变黑
-        //======================================================================================================================
-        gltf.scene.traverse(function (child) {
-          if (child.isMesh) {
-            // 1.2
-            child.material.metalness = 0.8;
-            // child.material.roughness = 0.6;
-            // child.frustumCulled = false;
-            child.material.emissiveIntensity = 1;
-            child.material.emissive = child.material.color;
-            child.material.emissiveMap = child.material.map;
-            // child.material.transparent = true;
-            // child.isLineSegments = true;
-            // child.material.wireframe = false;
-          }
-        });
-        //======================================================================================================================
-        //              处理模型变黑
-        //======================================================================================================================
-        }
+        // if(this.isIOS16){
+        // //======================================================================================================================
+        // //              处理模型变黑
+        // //======================================================================================================================
+        // gltf.scene.traverse(function (child) {
+        //   if (child.isMesh) {
+        //     // 1.2
+        //     child.material.metalness = 0.8;
+        //     // child.material.roughness = 0.6;
+        //     // child.frustumCulled = false;
+        //     child.material.emissiveIntensity = 1;
+        //     child.material.emissive = child.material.color;
+        //     child.material.emissiveMap = child.material.map;
+        //     // child.material.transparent = true;
+        //     // child.isLineSegments = true;
+        //     // child.material.wireframe = false;
+        //   }
+        // });
+        // //======================================================================================================================
+        // //              处理模型变黑
+        // //======================================================================================================================
+        // }
 
         const mao = gltf.scene.children[0];
         mao.position.set(0, 0, 0);
