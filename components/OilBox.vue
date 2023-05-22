@@ -155,6 +155,7 @@ export default {
         }
         else if((iosv==16&&iosv1>3)||iosv>16){
           this.isIOS17 = true;
+          console.log("isIOS17");
           window.createImageBitmap = undefined;
         }
       }
@@ -249,9 +250,9 @@ export default {
       scene.add(camera);
 
       // // 添加灯光
-      // if(this.isIOS16){
-      //   this.addLight();
-      // }
+      if(this.isIOS17){
+        this.addLight();
+      }
 
       this.loadGlb();
 
@@ -336,10 +337,24 @@ export default {
 
          gltf.scene.traverse(function (child) {
           if (child.isMesh) {
-            // child.material.roughness = 0.0;
-            // child.material.metalness = 1.0;
+            // child.material = new THREE.MeshPhysicalMaterial({
+            //     map:child.material.map,
+            //     color:child.material.color
+            // })
+            child.material.roughness = 0.0;
+            child.material.metalness = 1.0;
             child.material.emissive = child.material.color;
             child.material.emissiveMap = child.material.map;
+            child.geometry.computeVertexNormals();
+            child.material.emissiveIntensity = 1;
+            child.material.side = THREE.DoubleSide;
+            child.frustumCulled = false;
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material.transparent = true;
+            child.isLineSegments = true;
+            child.material.wireframe = false;
+            child.material.alphaTest = 0.2;
           }
          })
 
@@ -432,11 +447,12 @@ export default {
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
       if(this.isIOS17){
-        renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
+        // renderer.useLegacyLights = true;
+        // renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        renderer.toneMappingExposure = 0.8;//色调映射曝光度
-        renderer.shadowMap.enabled = true;//阴影就不用说了
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+        renderer.toneMappingExposure = 0.5;//色调映射曝光度
+        // renderer.shadowMap.enabled = true;//阴影就不用说了
+        // renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
       else{
         renderer.outputEncoding = THREE.sRGBEncoding;
@@ -456,17 +472,23 @@ export default {
       // console.log("container===",container);
       container.appendChild(renderer.domElement);
 
+      // console.log("scene.environment.encoding",scene.environment.encoding);
       const environment = new RoomEnvironment();
 
       const pmremGenerator = new THREE.PMREMGenerator(renderer);
       scene.environment = pmremGenerator.fromScene(environment).texture;
-      // console.log("scene.environment.encoding",scene.environment.encoding);
+      // if(!this.isIOS17){
+      //   const environment = new RoomEnvironment();
+
+      //   const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      //   scene.environment = pmremGenerator.fromScene(environment).texture;
+      // }
       if(this.isIOS16){
         scene.environment.encoding = THREE.sRGBEncoding;
       }
-      if(this.isIOS17){
-        scene.environment.encoding = THREE.sRGBEncoding;
-      }
+      // if(this.isIOS17){
+      //   scene.environment.encoding = THREE.sRGBEncoding;
+      // }
       // console.log("scene.environment.encoding",scene.environment.encoding);
       // // OrbitControls
       controls = new OrbitControls(camera, renderer.domElement);
