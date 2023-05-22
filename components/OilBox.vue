@@ -119,6 +119,7 @@ export default {
     
   },
   mounted () {
+    console.log("aaaaa",THREE.REVISION);
     //修复部分纹理随机黑色问题
     //======================
     this.judgeIOSversion();

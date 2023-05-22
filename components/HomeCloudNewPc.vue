@@ -209,7 +209,8 @@ export default {
         })
       );
 
-      renderer.physicallyCorrectLights = true;
+      // renderer.physicallyCorrectLights = true;
+      renderer.useLegacyLights = true;
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
       renderer.toneMappingExposure = 1.2;//色调映射曝光度
