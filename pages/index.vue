@@ -21,7 +21,7 @@ export default {
   },
   methods:{
     getRate(rate){
-      console.log("rate",rate);
+      // console.log("rate",rate);
       // this.loadRate = rate;
       // debugger
       // this.$emit('setrate',rate);

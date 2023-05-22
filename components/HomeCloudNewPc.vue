@@ -389,7 +389,7 @@ export default {
           } else {
             that.deleteGroup(currObj);
           }
-          console.log("currObj",currObj);
+          // console.log("currObj",currObj);
           scene.remove(currObj);
         }
       }
@@ -433,7 +433,7 @@ export default {
       }
       // console.log(scene);
       scene.clear();
-      console.log("scene",scene);
+      // console.log("scene",scene);
       scene = null;
       renderer.forceContextLoss();
       renderer.dispose();

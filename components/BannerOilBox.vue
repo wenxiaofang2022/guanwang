@@ -113,7 +113,7 @@ export default {
   methods: {
     judgeIOSversion(){
       var str= navigator.userAgent.toLowerCase();
-      // console.log("str: "+str);
+      console.log("navigator.userAgent: "+str);
       // alert("str: "+str);
       var ver=str.match(/cpu iphone os (.*?) like mac os/);
       // var ver;
@@ -398,7 +398,7 @@ export default {
       const dataurl = 'https://kasakii0428.oss-cn-shanghai.aliyuncs.com/caseimg/detail1_bak.glb';
       // const dataurl = '/caseimg/detail.glb';
       loader.load(dataurl, (gltf) => {
-        console.log("gltf", gltf);
+        // console.log("gltf", gltf);
         // const object = gltf.scene || gltf.scenes[0];
         // this.group.add(object);
         // this.add(this.group);

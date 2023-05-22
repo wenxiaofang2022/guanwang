@@ -361,7 +361,7 @@
         // this.$forceUpdate();
       },
       choseActive(e,m){
-        console.log("m",m);
+        // console.log("m",m);
         // if(this.isTouch)return;
         // e.stopPropagation();
         var push_down_card_list_box = document.getElementById("push_down_card_list_box");

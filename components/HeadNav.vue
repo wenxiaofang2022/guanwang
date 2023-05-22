@@ -106,9 +106,9 @@
       $route: {
         handler:  function (newVal, oldVal){
           if(newVal){
-            console.log(newVal.name);
+            // console.log(newVal.name);
             let index = newVal.name.indexOf("caselist-");
-            console.log("index",index);
+            // console.log("index",index);
             if(index>-1){
               this.commonNav = false;
             }
@@ -137,7 +137,7 @@
       let Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
       let getArr = Agents.filter(i => userAgentInfo.includes(i));
       // return getArr.length ? true : false;
-      console.log("getArr",getArr.length);
+      // console.log("getArr",getArr.length);
       // if(!getArr.length){
       //   this.$router.push({path: '/indexpc', replace: true})
       // }

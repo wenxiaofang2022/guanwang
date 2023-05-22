@@ -53,7 +53,7 @@
     },
     methods:{
       changeRate(rate){
-        console.log("rate555",rate);
+        // console.log("rate555",rate);
         if(rate==100||rate>100){
           this.$store.state.showLoading = false;
         }
