@@ -110,7 +110,7 @@ export default {
       back_ground5:"url("+this.$store.state.sourcRoot+"/image/caselist/divider.png)",
       back_ground6:"url("+this.$store.state.sourcRoot+"/image/caselist/bottom_tips.png)",
       isIOS16:false,
-      isIOS17:false,
+      isIOS17:true,
     }
   },
   watch: {
@@ -341,20 +341,32 @@ export default {
             //     map:child.material.map,
             //     color:child.material.color
             // })
-            child.material.roughness = 0.0;
-            child.material.metalness = 1.0;
-            child.material.emissive = child.material.color;
-            child.material.emissiveMap = child.material.map;
-            child.geometry.computeVertexNormals();
-            child.material.emissiveIntensity = 1;
-            child.material.side = THREE.DoubleSide;
-            child.frustumCulled = false;
-            child.castShadow = true;
-            child.receiveShadow = true;
-            child.material.transparent = true;
-            child.isLineSegments = true;
-            child.material.wireframe = false;
-            child.material.alphaTest = 0.2;
+            //child.material = new THREE.MeshLambertMaterial();//灰白色油桶
+            //child.material = new THREE.MeshNormalMaterial();//五颜六色彩色油桶
+            //child.material = new THREE.MeshPhongMaterial();//灰白色油桶
+            child.material = new THREE.MeshPhysicalMaterial({
+              roughness:0.2,
+              metalness:1.0,
+              emissive:child.material.color,
+              emissiveMap:child.material.map,
+              emissiveIntensity:1
+            });//油光暗灰色油桶
+
+            // child.material.roughness = 0.0;
+            // child.material.metalness = 1.0;
+            // child.material.emissiveIntensity = 1;
+            // child.material.emissive = child.material.color;
+            // child.material.emissiveMap = child.material.map;
+
+            // child.geometry.computeVertexNormals();
+            // child.material.side = THREE.DoubleSide;
+            // child.frustumCulled = false;
+            // child.castShadow = true;
+            // child.receiveShadow = true;
+            // child.material.transparent = true;
+            // child.isLineSegments = true;
+            // child.material.wireframe = false;
+            // child.material.alphaTest = 0.2;
           }
          })
 
@@ -450,7 +462,7 @@ export default {
         // renderer.useLegacyLights = true;
         // renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        renderer.toneMappingExposure = 0.5;//色调映射曝光度
+        renderer.toneMappingExposure = 1.5;//色调映射曝光度
         // renderer.shadowMap.enabled = true;//阴影就不用说了
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
@@ -473,22 +485,19 @@ export default {
       container.appendChild(renderer.domElement);
 
       // console.log("scene.environment.encoding",scene.environment.encoding);
-      const environment = new RoomEnvironment();
+      // const environment = new RoomEnvironment();
 
-      const pmremGenerator = new THREE.PMREMGenerator(renderer);
-      scene.environment = pmremGenerator.fromScene(environment).texture;
-      // if(!this.isIOS17){
-      //   const environment = new RoomEnvironment();
+      // const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      // scene.environment = pmremGenerator.fromScene(environment).texture;
+      if(!this.isIOS17){
+        const environment = new RoomEnvironment();
 
-      //   const pmremGenerator = new THREE.PMREMGenerator(renderer);
-      //   scene.environment = pmremGenerator.fromScene(environment).texture;
-      // }
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmremGenerator.fromScene(environment).texture;
+      }
       if(this.isIOS16){
         scene.environment.encoding = THREE.sRGBEncoding;
       }
-      // if(this.isIOS17){
-      //   scene.environment.encoding = THREE.sRGBEncoding;
-      // }
       // console.log("scene.environment.encoding",scene.environment.encoding);
       // // OrbitControls
       controls = new OrbitControls(camera, renderer.domElement);
@@ -542,34 +551,35 @@ export default {
     },
 
     addLight () {
+      const color = 0x404040;
       const common_num = 1000;
       const rate = 0.5;
       // 环境光
-      const ambientLight = new THREE.AmbientLight(0xffffff, rate);
+      const ambientLight = new THREE.AmbientLight(color, rate);
       this.add(ambientLight);
 
       // 平行光（太阳光）正面
-      const directionalLight = new THREE.DirectionalLight(0xffffff, rate);
+      const directionalLight = new THREE.DirectionalLight(color, rate);
       directionalLight.position.set(0, common_num, common_num);
       // directionalLight.castShadow = true;
       this.add(directionalLight);
 
       // 左侧
-      const directionalLight2 = new THREE.DirectionalLight(0xffffff, rate);
+      const directionalLight2 = new THREE.DirectionalLight(color, rate);
       directionalLight2.position.set(0 - common_num, common_num, common_num);
       this.add(directionalLight2);
 
       // 右侧
-      const directionalLight3 = new THREE.DirectionalLight(0xffffff, rate);
+      const directionalLight3 = new THREE.DirectionalLight(color, rate);
       directionalLight3.position.set(common_num, common_num, common_num);
       this.add(directionalLight3);
 
       // 背面
-      const directionalLight4 = new THREE.DirectionalLight(0xffffff, rate);
+      const directionalLight4 = new THREE.DirectionalLight(color, rate);
       directionalLight4.position.set(0, common_num, 0 - common_num);
       this.add(directionalLight4);
 
-      const directionalLight5 = new THREE.DirectionalLight(0xffffff, rate);
+      const directionalLight5 = new THREE.DirectionalLight(color, rate);
       directionalLight5.position.set(0, 0 - common_num, 0 - common_num);
       this.add(directionalLight5);
 
