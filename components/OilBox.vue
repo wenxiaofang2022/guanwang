@@ -110,6 +110,7 @@ export default {
       back_ground5:"url("+this.$store.state.sourcRoot+"/image/caselist/divider.png)",
       back_ground6:"url("+this.$store.state.sourcRoot+"/image/caselist/bottom_tips.png)",
       isIOS16:false,
+      isIOS17:false,
     }
   },
   watch: {
@@ -140,11 +141,20 @@ export default {
       // console.log("ver: "+ver);
       // alert("ver: "+ver);
       if(ver){
-        var iosv = parseInt(ver[1].replace(/_/g,"."));
-        //console.log('ios版本为：'+iosv);
-        // alert('ios版本为：'+iosv);
-        if(iosv==16){
+        // console.log("ver",ver);
+        var version = ver[1].replace(/_/g,".");
+        console.log("version",version);
+        // var iosv = parseInt(ver[1].replace(/_/g,"."));
+        var iosv = version.split(".")[0];
+        var iosv1 = version.split(".")[1].slice(0,1);
+        console.log('ios大版本为：'+iosv);
+        console.log('ios小版本为：'+iosv1);
+        if(iosv==16&&iosv1<4){
           this.isIOS16 = true;
+          window.createImageBitmap = undefined;
+        }
+        else if((iosv==16&&iosv1>3)||iosv>16){
+          this.isIOS17 = true;
           window.createImageBitmap = undefined;
         }
       }
@@ -184,12 +194,6 @@ export default {
       if(webglDomA&&webglDomA.firstChild){
         webglDomA.removeChild(webglDomA.firstChild);
       }
-
-      // let canvas = renderer.domElement;
-      // let gl = canvas.getContext('webgl');
-      // console.log("gl",gl);
-      //使用下面的扩展插件，手动销毁WebGL context对象。
-      // gl.getExtension('WEBGL_lose_context').loseContext();
 
       scene.traverse((child) => {
 				if (child.material) {
@@ -325,6 +329,24 @@ export default {
     },
 
     changeCamera(gltf){
+      if(this.isIOS17){
+         //======================================================================================================================
+         //              处理模型变黑
+         //======================================================================================================================
+
+         gltf.scene.traverse(function (child) {
+          if (child.isMesh) {
+            // child.material.roughness = 0.0;
+            // child.material.metalness = 1.0;
+            child.material.emissive = child.material.color;
+            child.material.emissiveMap = child.material.map;
+          }
+         })
+
+         //======================================================================================================================
+         //              处理模型变黑
+         //======================================================================================================================
+      }
       // if(this.isIOS16){
       //   //======================================================================================================================
       //   //              处理模型变黑
@@ -365,6 +387,8 @@ export default {
 
       // console.log("gltf",gltf);
       _object = gltf.scene || gltf.scenes[0];
+      console.log("_object",_object);
+      // _object = gltf.scene.children[0];
       const box = new THREE.Box3().setFromObject(_object);
       const size = box.getSize(new THREE.Vector3(0,0,0)).length();
       const center = box.getCenter(new THREE.Vector3(0,0,0));
@@ -407,6 +431,13 @@ export default {
         renderer.shadowMap.enabled = true;//阴影就不用说了
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
+      if(this.isIOS17){
+        renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+        renderer.toneMappingExposure = 0.8;//色调映射曝光度
+        renderer.shadowMap.enabled = true;//阴影就不用说了
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+      }
       else{
         renderer.outputEncoding = THREE.sRGBEncoding;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
@@ -431,6 +462,9 @@ export default {
       scene.environment = pmremGenerator.fromScene(environment).texture;
       // console.log("scene.environment.encoding",scene.environment.encoding);
       if(this.isIOS16){
+        scene.environment.encoding = THREE.sRGBEncoding;
+      }
+      if(this.isIOS17){
         scene.environment.encoding = THREE.sRGBEncoding;
       }
       // console.log("scene.environment.encoding",scene.environment.encoding);
@@ -463,6 +497,7 @@ export default {
       let tmproot = "https://kasakii0428.oss-cn-shanghai.aliyuncs.com";
       // let tmproot = this.sourcRootUrl;
       // let tmproot = '';
+      console.log("loader",loader);
       if(activeIndex==0){
         glburl = tmproot+'/caseimg/01_new.glb';
       }
@@ -479,13 +514,8 @@ export default {
         // console.log("gltf", gltf);
         //方法四
         this.changeCamera(gltf);
-      },(xhr)=>{
-        var _onProgress = Math.floor(xhr.loaded / xhr.total * 100);
-        if(_onProgress==100){
-          this.timer = setTimeout(() => {
-            this.loadFlag = false;
-          }, 500);
-        }
+      },undefined,(error)=>{
+        console.error( error );
       })
     },
 
@@ -652,7 +682,7 @@ export default {
           width: 100%;
           height:100%;
           position: relative;
-          z-index: 1;
+          z-index: 2;
           margin-top:-10px;
         }
         .loading-box{

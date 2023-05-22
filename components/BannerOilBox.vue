@@ -79,6 +79,7 @@ export default {
       // onPointerDownLat:0,
       back_ground: "url(" + this.$store.state.sourcRoot + "/image/aboutus/arrow-right.png)",
       isIOS16:false,
+      isIOS17:false,
     }
   },
   watch: {
@@ -113,7 +114,7 @@ export default {
   methods: {
     judgeIOSversion(){
       var str= navigator.userAgent.toLowerCase();
-      console.log("navigator.userAgent: "+str);
+      // console.log("str: "+str);
       // alert("str: "+str);
       var ver=str.match(/cpu iphone os (.*?) like mac os/);
       // var ver;
@@ -124,11 +125,20 @@ export default {
       // console.log("ver: "+ver);
       // alert("ver: "+ver);
       if(ver){
-        var iosv = parseInt(ver[1].replace(/_/g,"."));
-        //console.log('ios版本为：'+iosv);
-        // alert('ios版本为：'+iosv);
-        if(iosv==16){
+        // console.log("ver",ver);
+        var version = ver[1].replace(/_/g,".");
+        console.log("version",version);
+        // var iosv = parseInt(ver[1].replace(/_/g,"."));
+        var iosv = version.split(".")[0];
+        var iosv1 = version.split(".")[1].slice(0,1);
+        console.log('ios大版本为：'+iosv);
+        console.log('ios小版本为：'+iosv1);
+        if(iosv==16&&iosv1<4){
           this.isIOS16 = true;
+          window.createImageBitmap = undefined;
+        }
+        else if((iosv==16&&iosv1>3)||iosv>16){
+          this.isIOS17 = true;
           window.createImageBitmap = undefined;
         }
       }
@@ -270,6 +280,13 @@ export default {
         // this.renderer.shadowMap.enabled = true;//阴影就不用说了
         // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
+      if(this.isIOS17){
+        this.renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
+        this.renderer.toneMappingExposure = 0.4;//色调映射曝光度
+        this.renderer.shadowMap.enabled = true;//阴影就不用说了
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+      }
       else{
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
@@ -295,6 +312,9 @@ export default {
       const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
       this.scene.environment = pmremGenerator.fromScene(environment).texture;
       if(this.isIOS16){
+        this.scene.environment.encoding = THREE.sRGBEncoding;
+      }
+      if(this.isIOS17){
         this.scene.environment.encoding = THREE.sRGBEncoding;
       }
 
@@ -427,7 +447,24 @@ export default {
         //   }
         // });
 
-        
+        if(this.isIOS17){
+          //======================================================================================================================
+          //              处理模型变黑
+          //======================================================================================================================
+
+          gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+              // child.material.roughness = 0.0;
+              // child.material.metalness = 1.0;
+              child.material.emissive = child.material.color;
+              child.material.emissiveMap = child.material.map;
+            }
+          })
+
+          //======================================================================================================================
+          //              处理模型变黑
+          //======================================================================================================================
+        }
         // if(this.isIOS16){
         // //======================================================================================================================
         // //              处理模型变黑
