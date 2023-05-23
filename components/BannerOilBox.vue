@@ -283,9 +283,9 @@ export default {
       if(this.isIOS17){
         this.renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        this.renderer.toneMappingExposure = 0.4;//色调映射曝光度
-        this.renderer.shadowMap.enabled = true;//阴影就不用说了
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
+        this.renderer.toneMappingExposure = 0.6;//色调映射曝光度
+        // this.renderer.shadowMap.enabled = true;//阴影就不用说了
+        // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
       else{
         this.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -307,14 +307,13 @@ export default {
       this.renderer.setSize(this.width, this.height);
       document.getElementById("webglDom_banner").appendChild(this.renderer.domElement);
 
-      const environment = new RoomEnvironment();
+      if(!this.isIOS17){
+        const environment = new RoomEnvironment();
 
-      const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-      this.scene.environment = pmremGenerator.fromScene(environment).texture;
-      if(this.isIOS16){
-        this.scene.environment.encoding = THREE.sRGBEncoding;
+        const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+        this.scene.environment = pmremGenerator.fromScene(environment).texture;
       }
-      if(this.isIOS17){
+      if(this.isIOS16){
         this.scene.environment.encoding = THREE.sRGBEncoding;
       }
 
@@ -456,8 +455,8 @@ export default {
             if (child.isMesh) {
               // child.material.roughness = 0.0;
               // child.material.metalness = 1.0;
-              child.material.emissive = child.material.color;
-              child.material.emissiveMap = child.material.map;
+              // child.material.emissive = child.material.color;
+              // child.material.emissiveMap = child.material.map;
             }
           })
 
@@ -526,7 +525,11 @@ export default {
 
     addLight() {
       const common_num = 1000;
-      const rate = 0.5;
+      let rate = 0.5;
+      // 添加灯光
+      if(this.isIOS17){
+        rate = 1;
+      }
       // 环境光
       const ambientLight = new THREE.AmbientLight(0xffffff, rate);
       this.add(ambientLight);

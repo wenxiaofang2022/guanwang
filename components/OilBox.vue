@@ -110,7 +110,7 @@ export default {
       back_ground5:"url("+this.$store.state.sourcRoot+"/image/caselist/divider.png)",
       back_ground6:"url("+this.$store.state.sourcRoot+"/image/caselist/bottom_tips.png)",
       isIOS16:false,
-      isIOS17:true,
+      isIOS17:false,
     }
   },
   watch: {
@@ -344,13 +344,25 @@ export default {
             //child.material = new THREE.MeshLambertMaterial();//灰白色油桶
             //child.material = new THREE.MeshNormalMaterial();//五颜六色彩色油桶
             //child.material = new THREE.MeshPhongMaterial();//灰白色油桶
-            child.material = new THREE.MeshPhysicalMaterial({
-              roughness:0.2,
-              metalness:1.0,
-              emissive:child.material.color,
-              emissiveMap:child.material.map,
-              emissiveIntensity:1
-            });//油光暗灰色油桶
+            // child.material = new THREE.MeshPhysicalMaterial({
+            //   map:child.material.map,
+            //   color:child.material.color,
+            //   roughness:0.2,
+            //   metalness:1.0,
+            //   emissive:child.material.color,
+            //   emissiveMap:child.material.map,
+            //   emissiveIntensity:1
+            // });//油光暗灰色油桶
+            // child.material = new THREE.MeshStandardMaterial({
+            //   map:child.material.map,
+            //   color:child.material.color,
+            //   roughness:0.2,
+            //   metalness:1.0,
+            //   emissive:child.material.color,
+            //   emissiveMap:child.material.map,
+            //   emissiveIntensity:1
+            // })
+            // child.material = new THREE.MeshToonMaterial();//纯白色油桶
 
             // child.material.roughness = 0.0;
             // child.material.metalness = 1.0;
@@ -460,7 +472,7 @@ export default {
       }
       if(this.isIOS17){
         // renderer.useLegacyLights = true;
-        // renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
+        renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
         renderer.toneMappingExposure = 1.5;//色调映射曝光度
         // renderer.shadowMap.enabled = true;//阴影就不用说了
@@ -551,9 +563,10 @@ export default {
     },
 
     addLight () {
-      const color = 0x404040;
+      // const color = 0x303030;
+      const color = 0xffffff;
       const common_num = 1000;
-      const rate = 0.5;
+      const rate = 1;
       // 环境光
       const ambientLight = new THREE.AmbientLight(color, rate);
       this.add(ambientLight);
