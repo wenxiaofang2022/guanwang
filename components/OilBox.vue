@@ -474,7 +474,7 @@ export default {
         // renderer.useLegacyLights = true;
         renderer.outputEncoding = THREE.sRGBEncoding;//不能有，有的话就会整个黑掉
         renderer.toneMapping = THREE.ACESFilmicToneMapping;//aces标准
-        renderer.toneMappingExposure = 1.2;//色调映射曝光度
+        renderer.toneMappingExposure = 0.5;//色调映射曝光度
         // renderer.shadowMap.enabled = true;//阴影就不用说了
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap;//阴影类型（处理运用Shadow Map产生的阴影锯齿）
       }
