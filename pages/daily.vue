@@ -8,6 +8,22 @@
 <script>
 export default {
   name: 'DailyPage',
+  head() {
+      return {
+          title:'KASAKII家族的工作日常！',
+          meta:[{
+                  hid: 'description',
+                  name: 'description',
+                  content: '随时随地不定期更新的工作日常，让大家更好地了解我们。'
+              },
+              {
+                  hid: 'keywords',
+                  name: 'keywords',
+                  content: 'KASAKII,工作日常'
+              },
+          ]
+      }
+  },
   components: {
     PushDown:()=>import('@/components/PushDown'),
     CommonBottom:()=>import('@/components/CommonBottom'),

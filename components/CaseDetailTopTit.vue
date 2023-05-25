@@ -16,6 +16,22 @@ import casetits from '@/static/json/casetit.json'
   export default {
     name:'CaseDetailTopTit',
     props:['caseName'],
+    head() {
+      return {
+          title:this.caseTitles&&this.caseTitles[this.caseName]&&this.caseTitles[this.caseName].chinesetit,
+          meta:[{
+                  hid: 'description',
+                  name: 'description',
+                  content:this.caseTitles&&this.caseTitles[this.caseName]&&this.caseTitles[this.caseName].chinesesub
+              },
+              {
+                  hid: 'keywords',
+                  name: 'keywords',
+                  content: 'KASAKII，给油所'
+              },
+          ]
+      }
+    },
     data() {
       return{
         caseTitles:casetits,

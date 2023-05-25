@@ -12,6 +12,22 @@
 export default {
   layout:'loading',
   name: 'IndexPage',
+  head() {
+      return {
+          title:'欢迎进入给油所，请自取灵感能量！',
+          meta:[{
+                  hid: 'description',
+                  name: 'description',
+                  content: '无奇不有的灵感补给站。'
+              },
+              {
+                  hid: 'keywords',
+                  name: 'keywords',
+                  content: 'KASAKII，给油所'
+              },
+          ]
+      }
+  },
   components: {
     IndexTopText:()=>import('@/components/IndexTopText'),
     // HomeCloud:()=>import('@/components/HomeCloud'),
